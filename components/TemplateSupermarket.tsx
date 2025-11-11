@@ -22,7 +22,7 @@ export default function TemplateSupermarket() {
 
     const clauses = template.clauses
       .map((clauseId) => mockClauses.find((c) => c.id === clauseId))
-      .filter(Boolean);
+      .filter((clause): clause is NonNullable<typeof clause> => clause !== undefined);
 
     return { template, clauses };
   };
