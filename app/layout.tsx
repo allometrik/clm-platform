@@ -5,8 +5,8 @@ import './globals.css'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'Gestor de Contratos - Microsoft 365',
-  description: 'Sistema de gestión de contratos integrado con Microsoft 365',
+  title: 'Plataforma CLM - Contract Lifecycle Management',
+  description: 'Plataforma completa de gestión del ciclo de vida de contratos - CLM',
 }
 
 export default function RootLayout({

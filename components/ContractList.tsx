@@ -1,7 +1,7 @@
 'use client';
 
 import { Contract, ContractStatus } from '@/lib/data';
-import { FileText, Calendar, CheckCircle, Clock, Edit, AlertTriangle } from 'lucide-react';
+import { FileText, Calendar, CheckCircle, Clock, Edit, AlertTriangle, Users, Archive, Activity, RotateCw, XCircle } from 'lucide-react';
 
 interface ContractListProps {
   contracts: Contract[];
@@ -15,27 +15,39 @@ const statusConfig: Record<ContractStatus, { label: string; icon: any; color: st
     color: 'bg-gray-100',
     textColor: 'text-gray-700',
   },
-  en_aprobacion: {
-    label: 'En Aprobación',
-    icon: Clock,
-    color: 'bg-amber-50',
-    textColor: 'text-amber-700',
-  },
-  aprobado: {
-    label: 'Aprobado',
-    icon: CheckCircle,
-    color: 'bg-emerald-50',
-    textColor: 'text-emerald-700',
-  },
   negociacion: {
-    label: 'En Negociación',
-    icon: Clock,
+    label: 'Negociación',
+    icon: Users,
+    color: 'bg-blue-50',
+    textColor: 'text-blue-700',
+  },
+  firma: {
+    label: 'Firma',
+    icon: FileText,
+    color: 'bg-purple-50',
+    textColor: 'text-purple-700',
+  },
+  archivado: {
+    label: 'Archivado',
+    icon: Archive,
+    color: 'bg-green-50',
+    textColor: 'text-green-700',
+  },
+  cumplimiento: {
+    label: 'Cumplimiento',
+    icon: Activity,
+    color: 'bg-teal-50',
+    textColor: 'text-teal-700',
+  },
+  renovacion: {
+    label: 'Renovación',
+    icon: RotateCw,
     color: 'bg-orange-50',
     textColor: 'text-orange-700',
   },
-  rechazado: {
-    label: 'Rechazado',
-    icon: CheckCircle,
+  vencido: {
+    label: 'Vencido',
+    icon: XCircle,
     color: 'bg-red-50',
     textColor: 'text-red-700',
   },

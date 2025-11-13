@@ -1,4 +1,4 @@
-export type ContractStatus = 'borrador' | 'en_aprobacion' | 'aprobado' | 'negociacion' | 'rechazado';
+export type ContractStatus = 'borrador' | 'negociacion' | 'firma' | 'archivado' | 'cumplimiento' | 'renovacion' | 'vencido';
 export type RequestStatus = 'nueva' | 'en_revision' | 'asignada' | 'en_proceso' | 'completada' | 'rechazada';
 export type ApprovalStatus = 'pendiente' | 'aprobado' | 'rechazado' | 'devuelto';
 export type RiskLevel = 'bajo' | 'medio' | 'alto' | 'critico';
@@ -16,6 +16,17 @@ export interface Contract {
   currentVersion: number;
   riskLevel?: RiskLevel;
   assignedTo?: string;
+  // Archiving metadata
+  signedDate?: string;
+  archivedDate?: string;
+  expirationDate?: string;
+  renewalDate?: string;
+  signingParties?: string[];
+  contractType?: string;
+  responsibleArea?: string;
+  value?: number;
+  currency?: string;
+  autoRenewal?: boolean;
 }
 
 export interface ContractRequest {
@@ -133,15 +144,24 @@ export const mockContracts: Contract[] = [
     id: '1',
     title: 'Contrato de Servicios Tecnológicos',
     client: 'Empresa ABC S.A.',
-    status: 'aprobado',
+    status: 'cumplimiento',
     createdDate: '2024-01-15',
     lastModified: '2024-01-20',
+    signedDate: '2024-01-25',
+    archivedDate: '2024-01-26',
+    expirationDate: '2025-01-25',
     description: 'Contrato para servicios de desarrollo de software',
     requestId: 'REQ-003',
     templateId: '2',
     currentVersion: 1,
     riskLevel: 'bajo',
     assignedTo: 'María González',
+    signingParties: ['Empresa ABC S.A.', 'Nuestra Empresa'],
+    contractType: 'Servicios Tecnológicos',
+    responsibleArea: 'TI',
+    value: 50000,
+    currency: 'EUR',
+    autoRenewal: true,
   },
   {
     id: '2',
@@ -156,6 +176,10 @@ export const mockContracts: Contract[] = [
     currentVersion: 3,
     riskLevel: 'medio',
     assignedTo: 'María González',
+    contractType: 'Consultoría',
+    responsibleArea: 'Dirección',
+    value: 75000,
+    currency: 'EUR',
   },
   {
     id: '3',
@@ -170,26 +194,38 @@ export const mockContracts: Contract[] = [
     currentVersion: 1,
     riskLevel: 'bajo',
     assignedTo: 'Ana Martínez',
+    contractType: 'NDA',
+    responsibleArea: 'Legal',
   },
   {
     id: '4',
     title: 'Contrato de Mantenimiento',
     client: 'Global Systems',
-    status: 'aprobado',
+    status: 'archivado',
     createdDate: '2024-01-20',
     lastModified: '2024-01-25',
+    signedDate: '2024-01-30',
+    archivedDate: '2024-01-31',
+    expirationDate: '2025-01-30',
+    renewalDate: '2024-12-30',
     description: 'Mantenimiento anual de sistemas',
     requestId: 'REQ-003',
     templateId: '1',
     currentVersion: 1,
     riskLevel: 'bajo',
     assignedTo: 'María González',
+    signingParties: ['Global Systems', 'Nuestra Empresa'],
+    contractType: 'Mantenimiento',
+    responsibleArea: 'Operaciones',
+    value: 25000,
+    currency: 'EUR',
+    autoRenewal: true,
   },
   {
     id: '5',
     title: 'Contrato de Licencia',
     client: 'Digital Partners',
-    status: 'en_aprobacion',
+    status: 'firma',
     createdDate: '2024-02-08',
     lastModified: '2024-02-14',
     description: 'Licencia de software empresarial',
@@ -198,6 +234,33 @@ export const mockContracts: Contract[] = [
     currentVersion: 1,
     riskLevel: 'medio',
     assignedTo: 'Ana Martínez',
+    contractType: 'Licencia',
+    responsibleArea: 'TI',
+    value: 30000,
+    currency: 'EUR',
+  },
+  {
+    id: '6',
+    title: 'Contrato de Proveedor Cloud',
+    client: 'CloudTech Services',
+    status: 'renovacion',
+    createdDate: '2023-03-15',
+    lastModified: '2024-02-10',
+    signedDate: '2023-04-01',
+    archivedDate: '2023-04-02',
+    expirationDate: '2024-04-01',
+    renewalDate: '2024-03-01',
+    description: 'Servicios de infraestructura cloud',
+    templateId: '2',
+    currentVersion: 2,
+    riskLevel: 'medio',
+    assignedTo: 'María González',
+    signingParties: ['CloudTech Services', 'Nuestra Empresa'],
+    contractType: 'Servicios Cloud',
+    responsibleArea: 'TI',
+    value: 120000,
+    currency: 'EUR',
+    autoRenewal: false,
   },
 ];
 
