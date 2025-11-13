@@ -97,15 +97,15 @@ export default function ContractBrowser({ contracts, onContractClick }: Contract
 
   return (
     <>
-      <div className="space-y-6">
-        {/* Panel de Contratos - Full Width */}
-        <div className="w-full">
-          <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl shadow-lg border border-blue-200/50 p-6">
+      <div className="grid grid-cols-12 gap-6">
+        {/* Panel Izquierdo - Sidebar de Categorías */}
+        <div className="col-span-12 lg:col-span-3">
+          <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl shadow-lg border border-blue-200/50 p-6 sticky top-24 max-h-[calc(100vh-8rem)] overflow-y-auto">
             <div className="flex items-center gap-2 mb-6">
               <div className="bg-gradient-to-br from-blue-500 to-blue-600 p-2 rounded-xl">
                 <FileText className="w-5 h-5 text-white" />
               </div>
-              <h3 className="text-lg font-bold text-gray-900">Buscador de Contratos</h3>
+              <h3 className="text-lg font-bold text-gray-900">Categorías</h3>
             </div>
 
             {/* Elegant Search Input */}
@@ -156,84 +156,119 @@ export default function ContractBrowser({ contracts, onContractClick }: Contract
               </div>
             )}
 
-            {/* Árbol de contratos en formato de grid/cards */}
-            <div className="space-y-3">
+            {/* Árbol de categorías */}
+            <div className="space-y-2">
               {Object.entries(contractsByType).map(([type, typeContracts]) => (
-                <div key={type} className="bg-white/40 rounded-xl p-4">
+                <div key={type}>
                   {/* Tipo de contrato */}
                   <button
                     onClick={() => toggleType(type)}
-                    className="w-full flex items-center gap-2 px-3 py-2 rounded-xl hover:bg-white/60 transition-all duration-200 group mb-2"
+                    className="w-full flex items-center gap-2 px-3 py-2 rounded-xl hover:bg-white/60 transition-all duration-200 group"
                   >
                     {expandedTypes.has(type) ? (
-                      <ChevronDown className="w-5 h-5 text-blue-600" />
+                      <ChevronDown className="w-4 h-4 text-blue-600" />
                     ) : (
-                      <ChevronRight className="w-5 h-5 text-blue-600" />
+                      <ChevronRight className="w-4 h-4 text-blue-600" />
                     )}
-                    <Tag className="w-5 h-5 text-blue-600" />
-                    <span className="font-bold text-gray-900 flex-1 text-left text-lg">
+                    <Tag className="w-4 h-4 text-blue-600" />
+                    <span className="font-semibold text-gray-900 flex-1 text-left text-sm">
                       {type}
                     </span>
-                    <span className="text-sm bg-gradient-to-r from-blue-500 to-purple-600 text-white px-3 py-1 rounded-full font-semibold">
+                    <span className="text-xs bg-white px-2 py-0.5 rounded-full text-gray-600">
                       {typeContracts.length}
                     </span>
                   </button>
-
-                  {/* Contratos dentro del tipo - Grid */}
-                  {expandedTypes.has(type) && (
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-2">
-                      {typeContracts.map(contract => {
-                        const Icon = statusConfig[contract.status].icon;
-                        const statusInfo = statusConfig[contract.status];
-                        return (
-                          <button
-                            key={contract.id}
-                            onClick={() => selectContract(contract)}
-                            className="bg-white rounded-xl p-4 text-left transition-all duration-200 hover:shadow-lg hover:scale-105 border border-gray-200 hover:border-blue-300 group"
-                          >
-                            <div className="flex items-start gap-3 mb-3">
-                              <div className={`${statusInfo.bgColor} p-2 rounded-lg`}>
-                                <Icon className={`w-4 h-4 ${statusInfo.color}`} />
-                              </div>
-                              <div className="flex-1 min-w-0">
-                                <h4 className="font-semibold text-gray-900 text-sm mb-1 line-clamp-2 group-hover:text-blue-600 transition-colors">
-                                  {contract.title}
-                                </h4>
-                                <div className="flex items-center gap-1 text-xs text-gray-600 mb-2">
-                                  <Users className="w-3 h-3" />
-                                  <span className="truncate">{contract.client}</span>
-                                </div>
-                              </div>
-                            </div>
-                            
-                            <div className="flex items-center justify-between pt-3 border-t border-gray-100">
-                              <span className={`text-xs font-semibold px-2 py-1 rounded-md ${statusInfo.bgColor} ${statusInfo.color}`}>
-                                {statusInfo.label}
-                              </span>
-                              {contract.value && (
-                                <span className="text-xs font-semibold text-gray-700">
-                                  {new Intl.NumberFormat('es-ES', { 
-                                    style: 'currency', 
-                                    currency: contract.currency || 'EUR',
-                                    maximumFractionDigits: 0,
-                                    notation: 'compact'
-                                  }).format(contract.value)}
-                                </span>
-                              )}
-                            </div>
-                          </button>
-                        );
-                      })}
-                    </div>
-                  )}
                 </div>
               ))}
             </div>
 
             {Object.keys(contractsByType).length === 0 && (
-              <div className="text-center py-12 bg-white/40 rounded-xl">
-                <FileText className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-                <p className="text-sm text-gray-500 font-medium">No hay contratos disponibles</p>
+              <div className="text-center py-8">
+                <FileText className="w-12 h-12 text-gray-300 mx-auto mb-3" />
+                <p className="text-sm text-gray-500">No hay contratos disponibles</p>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Panel Derecho - Grid de Contratos */}
+        <div className="col-span-12 lg:col-span-9">
+          <div className="space-y-6">
+            {Object.entries(contractsByType)
+              .filter(([type]) => expandedTypes.has(type))
+              .map(([type, typeContracts]) => (
+                <div key={type}>
+                  {/* Header de la sección */}
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="bg-gradient-to-br from-blue-500 to-purple-600 p-2 rounded-xl">
+                      <Tag className="w-5 h-5 text-white" />
+                    </div>
+                    <h3 className="text-xl font-bold text-gray-900">{type}</h3>
+                    <span className="text-sm bg-gradient-to-r from-blue-500 to-purple-600 text-white px-3 py-1 rounded-full font-semibold">
+                      {typeContracts.length}
+                    </span>
+                  </div>
+
+                  {/* Grid de contratos */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {typeContracts.map(contract => {
+                      const Icon = statusConfig[contract.status].icon;
+                      const statusInfo = statusConfig[contract.status];
+                      return (
+                        <button
+                          key={contract.id}
+                          onClick={() => selectContract(contract)}
+                          className="bg-white rounded-xl p-5 text-left transition-all duration-200 hover:shadow-xl hover:scale-105 border border-gray-200 hover:border-blue-300 group"
+                        >
+                          <div className="flex items-start gap-3 mb-3">
+                            <div className={`${statusInfo.bgColor} p-2.5 rounded-lg`}>
+                              <Icon className={`w-5 h-5 ${statusInfo.color}`} />
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <h4 className="font-semibold text-gray-900 text-base mb-1 line-clamp-2 group-hover:text-blue-600 transition-colors">
+                                {contract.title}
+                              </h4>
+                              <div className="flex items-center gap-1 text-xs text-gray-600 mb-2">
+                                <Users className="w-3.5 h-3.5" />
+                                <span className="truncate">{contract.client}</span>
+                              </div>
+                            </div>
+                          </div>
+                          
+                          <div className="flex items-center justify-between pt-3 border-t border-gray-100">
+                            <span className={`text-xs font-semibold px-2.5 py-1 rounded-md ${statusInfo.bgColor} ${statusInfo.color}`}>
+                              {statusInfo.label}
+                            </span>
+                            {contract.value && (
+                              <span className="text-xs font-semibold text-gray-700">
+                                {new Intl.NumberFormat('es-ES', { 
+                                  style: 'currency', 
+                                  currency: contract.currency || 'EUR',
+                                  maximumFractionDigits: 0,
+                                  notation: 'compact'
+                                }).format(contract.value)}
+                              </span>
+                            )}
+                          </div>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              ))}
+
+            {/* Mensaje cuando no hay categorías expandidas */}
+            {Object.entries(contractsByType).filter(([type]) => expandedTypes.has(type)).length === 0 && (
+              <div className="bg-white rounded-2xl shadow-lg border border-gray-200/50 p-12 text-center">
+                <div className="bg-gradient-to-br from-blue-500 to-purple-600 p-4 rounded-2xl w-20 h-20 mx-auto mb-6 flex items-center justify-center">
+                  <FileText className="w-10 h-10 text-white" />
+                </div>
+                <h3 className="text-xl font-bold text-gray-900 mb-2">
+                  Selecciona una categoría
+                </h3>
+                <p className="text-gray-600">
+                  Haz clic en las categorías de la izquierda para ver los contratos
+                </p>
               </div>
             )}
           </div>
