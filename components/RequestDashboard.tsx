@@ -284,15 +284,20 @@ export default function RequestDashboard({ requests }: RequestDashboardProps) {
               </div>
 
               <div className="space-y-4">
-                <div className="flex gap-2">
-                  <span className={`inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium ${statusConfig[selectedRequest.status].color}`}>
-                    {statusConfig[selectedRequest.status].label}
-                  </span>
-                  <span className={`inline-flex items-center text-sm font-medium ${priorityConfig[selectedRequest.priority].color}`}>
-                    <PriorityIcon className="w-4 h-4 mr-1" />
-                    Prioridad: {priorityConfig[selectedRequest.priority].label}
-                  </span>
-                </div>
+                {(() => {
+                  const ModalPriorityIcon = priorityConfig[selectedRequest.priority].icon;
+                  return (
+                    <div className="flex gap-2">
+                      <span className={`inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium ${statusConfig[selectedRequest.status].color}`}>
+                        {statusConfig[selectedRequest.status].label}
+                      </span>
+                      <span className={`inline-flex items-center text-sm font-medium ${priorityConfig[selectedRequest.priority].color}`}>
+                        <ModalPriorityIcon className="w-4 h-4 mr-1" />
+                        Prioridad: {priorityConfig[selectedRequest.priority].label}
+                      </span>
+                    </div>
+                  );
+                })()}
 
                 <div>
                   <h3 className="text-sm font-semibold text-gray-700 mb-2">Descripción</h3>
