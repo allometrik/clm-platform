@@ -255,7 +255,7 @@ export default function ContractLifecycle({ contracts, onContractClick }: Contra
               <div
                 key={contract.id}
                 className="bg-white rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition-shadow cursor-pointer"
-                onClick={() => onContractClick(contract)}
+                onClick={() => onContractClick?.(contract)}
               >
                 <div className="p-5">
                   {/* Header */}
@@ -448,7 +448,7 @@ export default function ContractLifecycle({ contracts, onContractClick }: Contra
                       </td>
                       <td className="px-4 py-3">
                         <button
-                          onClick={() => onContractClick(contract)}
+                          onClick={() => onContractClick?.(contract)}
                           className="text-primary hover:text-primary-dark"
                         >
                           <Eye className="w-4 h-4" />
