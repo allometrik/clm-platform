@@ -2,16 +2,14 @@
 
 import { useState } from 'react';
 import { mockContracts, mockRequests, Contract } from '@/lib/data';
-import ContractList from '@/components/ContractList';
+import ContractBrowser from '@/components/ContractBrowser';
 import ContractForm from '@/components/ContractForm';
 import ClauseLibrary from '@/components/ClauseLibrary';
 import RequestPortal from '@/components/RequestPortal';
 import RequestDashboard from '@/components/RequestDashboard';
 import TemplateSupermarket from '@/components/TemplateSupermarket';
 import LegalPlaybookView from '@/components/LegalPlaybook';
-import ContractDetails from '@/components/ContractDetails';
 import ContractLifecycle from '@/components/ContractLifecycle';
-import SearchBar from '@/components/SearchBar';
 import { FileText, Plus, BookOpen, Ticket, ShoppingCart, Scale, Search, Activity } from 'lucide-react';
 
 type MainScreen = 'screen1' | 'screen2' | 'screen3';
@@ -26,14 +24,6 @@ export default function Home() {
   const [screen1View, setScreen1View] = useState<Screen1View>('clauses');
   const [screen2View, setScreen2View] = useState<Screen2View>('dashboard');
   const [screen3View, setScreen3View] = useState<Screen3View>('lifecycle');
-  const [selectedContract, setSelectedContract] = useState<Contract | null>(null);
-  const [searchQuery, setSearchQuery] = useState('');
-
-  const filteredContracts = contracts.filter(
-    (contract) =>
-      contract.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      contract.client.toLowerCase().includes(searchQuery.toLowerCase())
-  );
 
   const handleGenerateContract = (contractData: any) => {
     const newContract = {
@@ -192,30 +182,7 @@ export default function Home() {
             )}
 
             {screen1View === 'contracts' && (
-              <div className="space-y-6">
-                <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 pb-2 border-b border-gray-200">
-                  <div>
-                    <h2 className="text-2xl font-semibold text-primary-dark mb-1">Repositorio de Contratos</h2>
-                    <p className="text-sm text-gray-500">Gestiona y revisa todos tus contratos</p>
-                  </div>
-                </div>
-
-                <div className="space-y-4">
-                  <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
-                  {searchQuery && (
-                    <p className="text-sm text-gray-600">
-                      {filteredContracts.length === 1 
-                        ? '1 contrato encontrado' 
-                        : `${filteredContracts.length} contratos encontrados`}
-                    </p>
-                  )}
-                </div>
-
-                <ContractList
-                  contracts={filteredContracts}
-                  onContractClick={setSelectedContract}
-                />
-              </div>
+              <ContractBrowser contracts={contracts} />
             )}
 
             {screen1View === 'market' && (
@@ -313,8 +280,7 @@ export default function Home() {
         {activeScreen === 'screen3' && (
           <div className="space-y-6">
             <ContractLifecycle 
-              contracts={contracts} 
-              onContractClick={setSelectedContract}
+              contracts={contracts}
             />
           </div>
         )}
@@ -345,14 +311,6 @@ export default function Home() {
           </div>
         </div>
       </footer>
-
-      {/* Modal de detalles del contrato */}
-      {selectedContract && (
-        <ContractDetails
-          contract={selectedContract}
-          onClose={() => setSelectedContract(null)}
-        />
-      )}
     </div>
   );
 }

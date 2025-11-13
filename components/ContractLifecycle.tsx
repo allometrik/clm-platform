@@ -21,7 +21,7 @@ import { useState } from 'react';
 
 interface ContractLifecycleProps {
   contracts: Contract[];
-  onContractClick: (contract: Contract) => void;
+  onContractClick?: (contract: Contract) => void;
 }
 
 const lifecyclePhases = [
