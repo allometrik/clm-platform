@@ -39,7 +39,7 @@ const statusConfig = {
 };
 
 export default function ContractBrowser({ contracts, onContractClick }: ContractBrowserProps) {
-  const [expandedTypes, setExpandedTypes] = useState<Set<string>>(new Set(['Servicios Tecnológicos', 'Mantenimiento', 'Consultoría']));
+  const [expandedTypes, setExpandedTypes] = useState<Set<string>>(new Set());
   const [selectedContract, setSelectedContract] = useState<Contract | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [showClausesModal, setShowClausesModal] = useState(false);
@@ -178,6 +178,29 @@ export default function ContractBrowser({ contracts, onContractClick }: Contract
                       {typeContracts.length}
                     </span>
                   </button>
+
+                  {/* Contratos dentro del tipo */}
+                  {expandedTypes.has(type) && (
+                    <div className="ml-6 mt-1 space-y-1">
+                      {typeContracts.map(contract => {
+                        const Icon = statusConfig[contract.status].icon;
+                        return (
+                          <button
+                            key={contract.id}
+                            onClick={() => selectContract(contract)}
+                            className="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-all duration-200 text-left hover:bg-white/60 text-gray-700"
+                          >
+                            <Icon className="w-3.5 h-3.5 flex-shrink-0" />
+                            <div className="flex-1 min-w-0">
+                              <p className="font-medium truncate">{contract.title}</p>
+                              <p className="text-xs opacity-80 truncate">{contract.client}</p>
+                            </div>
+                            <ChevronRight className="w-3.5 h-3.5 opacity-50" />
+                          </button>
+                        );
+                      })}
+                    </div>
+                  )}
                 </div>
               ))}
             </div>
