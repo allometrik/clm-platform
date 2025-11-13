@@ -18,7 +18,8 @@ import {
   Square,
   Sparkles,
   Download,
-  Search
+  Search,
+  AlertCircle
 } from 'lucide-react';
 
 interface ClauseVersion {
@@ -49,10 +50,31 @@ export default function ClauseLibrary() {
   const [showCreateContract, setShowCreateContract] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
 
-  // Organizar cláusulas en estructura jerárquica
-  const clauseTree: Record<string, ClauseNode[]> = {};
-  
-  // Filtrar cláusulas por búsqueda
+  // Organizar TODAS las cláusulas en estructura jerárquica (para el modal)
+  const allClausesTree: Record<string, ClauseNode[]> = {};
+  mockClauses.forEach(clause => {
+    if (!allClausesTree[clause.category]) {
+      allClausesTree[clause.category] = [];
+    }
+    allClausesTree[clause.category].push({
+      id: clause.id,
+      title: clause.title,
+      category: clause.category,
+      content: clause.content,
+      lastModified: clause.lastModified,
+      versions: [
+        {
+          version: 1,
+          content: clause.content,
+          modifiedBy: 'Sistema',
+          modifiedDate: clause.lastModified,
+          changes: 'Versión inicial'
+        }
+      ]
+    });
+  });
+
+  // Filtrar cláusulas por búsqueda (para el sidebar)
   const filteredClauses = mockClauses.filter(clause => {
     const searchLower = searchQuery.toLowerCase();
     return (
@@ -62,6 +84,8 @@ export default function ClauseLibrary() {
     );
   });
 
+  // Árbol filtrado para el sidebar
+  const clauseTree: Record<string, ClauseNode[]> = {};
   filteredClauses.forEach(clause => {
     if (!clauseTree[clause.category]) {
       clauseTree[clause.category] = [];
@@ -155,15 +179,31 @@ export default function ClauseLibrary() {
             Gestiona y edita tus cláusulas legales con control de versiones
           </p>
         </div>
-        {selectedClauses.size > 0 && (
+        <div className="flex gap-3">
+          {/* Botón siempre visible */}
           <button
             onClick={() => setShowCreateContract(true)}
             className="btn-primary flex items-center gap-2"
           >
             <Plus className="w-4 h-4" />
-            Crear Contrato con {selectedClauses.size} Cláusulas
+            Crear Contrato
           </button>
-        )}
+          {/* Botón con contador cuando hay selección previa */}
+          {selectedClauses.size > 0 && (
+            <div className="relative">
+              <button
+                onClick={() => setShowCreateContract(true)}
+                className="btn-accent flex items-center gap-2"
+              >
+                <Sparkles className="w-4 h-4" />
+                Con {selectedClauses.size} Seleccionadas
+              </button>
+              <div className="absolute -top-2 -right-2 bg-gradient-to-br from-red-500 to-red-600 text-white text-xs font-bold w-6 h-6 rounded-full flex items-center justify-center shadow-lg animate-pulse">
+                {selectedClauses.size}
+              </div>
+            </div>
+          )}
+        </div>
       </div>
 
       <div className="grid grid-cols-12 gap-6">
@@ -468,53 +508,209 @@ export default function ClauseLibrary() {
         </div>
       </div>
 
-      {/* Modal crear contrato */}
+      {/* Modal crear contrato mejorado */}
       {showCreateContract && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full p-8">
-            <h3 className="text-2xl font-bold text-gray-900 mb-4">
-              Crear Contrato con Cláusulas Seleccionadas
-            </h3>
-            <p className="text-gray-600 mb-6">
-              Has seleccionado {selectedClauses.size} cláusulas para tu nuevo contrato.
-            </p>
-            <div className="mb-6">
-              <label className="block text-sm font-semibold text-gray-700 mb-2">
-                Nombre del Contrato
-              </label>
-              <input
-                type="text"
-                className="input-field"
-                placeholder="Ej: Contrato de Servicios Profesionales"
-              />
-            </div>
-            <div className="mb-6">
-              <label className="block text-sm font-semibold text-gray-700 mb-2">
-                Cláusulas Incluidas
-              </label>
-              <div className="bg-gray-50 rounded-xl p-4 max-h-40 overflow-y-auto">
-                {Array.from(selectedClauses).map(clauseId => {
-                  const clause = mockClauses.find(c => c.id === clauseId);
-                  return (
-                    <div key={clauseId} className="flex items-center gap-2 py-2">
-                      <CheckSquare className="w-4 h-4 text-blue-600" />
-                      <span className="text-sm text-gray-700">{clause?.title}</span>
-                    </div>
-                  );
-                })}
+          <div className="bg-white rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden flex flex-col">
+            {/* Header del Modal */}
+            <div className="bg-gradient-to-r from-blue-600 to-purple-600 p-6 text-white">
+              <div className="flex items-start justify-between">
+                <div>
+                  <h3 className="text-2xl font-bold mb-2">
+                    Crear Nuevo Contrato
+                  </h3>
+                  <p className="text-blue-100 text-sm">
+                    Selecciona las cláusulas que deseas incluir en tu contrato
+                  </p>
+                </div>
+                <button
+                  onClick={() => setShowCreateContract(false)}
+                  className="text-white/80 hover:text-white transition-colors"
+                >
+                  <X className="w-6 h-6" />
+                </button>
               </div>
             </div>
-            <div className="flex gap-3">
-              <button className="btn-primary flex-1 flex items-center justify-center gap-2">
-                <Plus className="w-4 h-4" />
-                Crear Contrato
-              </button>
-              <button 
-                onClick={() => setShowCreateContract(false)}
-                className="btn-secondary"
-              >
-                Cancelar
-              </button>
+
+            {/* Contenido del Modal */}
+            <div className="flex-1 overflow-y-auto p-6">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                {/* Columna Izquierda - Selección de Cláusulas */}
+                <div>
+                  <div className="flex items-center justify-between mb-4">
+                    <h4 className="font-bold text-gray-900">
+                      Cláusulas Disponibles
+                    </h4>
+                    <span className="text-sm text-gray-500">
+                      {selectedClauses.size} seleccionadas
+                    </span>
+                  </div>
+                  
+                  <div className="space-y-3 max-h-96 overflow-y-auto bg-gray-50 rounded-xl p-4">
+                    {Object.entries(allClausesTree).map(([category, clauses]) => (
+                      <div key={category} className="space-y-2">
+                        {/* Categoría con checkbox "Seleccionar todas" */}
+                        <div className="flex items-center gap-2 pb-2 border-b border-gray-200">
+                          <button
+                            onClick={() => {
+                              const categoryClauses = clauses.map(c => c.id);
+                              const allSelected = categoryClauses.every(id => selectedClauses.has(id));
+                              const newSelection = new Set(selectedClauses);
+                              
+                              if (allSelected) {
+                                categoryClauses.forEach(id => newSelection.delete(id));
+                              } else {
+                                categoryClauses.forEach(id => newSelection.add(id));
+                              }
+                              setSelectedClauses(newSelection);
+                            }}
+                            className="flex-shrink-0"
+                          >
+                            {clauses.every(c => selectedClauses.has(c.id)) ? (
+                              <CheckSquare className="w-4 h-4 text-blue-600" />
+                            ) : clauses.some(c => selectedClauses.has(c.id)) ? (
+                              <div className="w-4 h-4 border-2 border-blue-600 rounded bg-blue-100 flex items-center justify-center">
+                                <div className="w-2 h-2 bg-blue-600 rounded-sm"></div>
+                              </div>
+                            ) : (
+                              <Square className="w-4 h-4 text-gray-400" />
+                            )}
+                          </button>
+                          <Tag className="w-4 h-4 text-orange-600" />
+                          <span className="font-semibold text-sm text-gray-900">{category}</span>
+                          <span className="text-xs text-gray-500 ml-auto">
+                            {clauses.length}
+                          </span>
+                        </div>
+
+                        {/* Cláusulas de la categoría */}
+                        <div className="ml-6 space-y-1">
+                          {clauses.map(clause => (
+                            <button
+                              key={clause.id}
+                              onClick={() => toggleClauseSelection(clause.id)}
+                              className="w-full flex items-center gap-2 p-2 rounded-lg hover:bg-white transition-all group text-left"
+                            >
+                              {selectedClauses.has(clause.id) ? (
+                                <CheckSquare className="w-4 h-4 text-blue-600 flex-shrink-0" />
+                              ) : (
+                                <Square className="w-4 h-4 text-gray-400 group-hover:text-blue-400 flex-shrink-0" />
+                              )}
+                              <div className="flex-1 min-w-0">
+                                <p className="text-sm font-medium text-gray-700 truncate">
+                                  {clause.title}
+                                </p>
+                                <p className="text-xs text-gray-500 truncate">
+                                  {clause.content.substring(0, 60)}...
+                                </p>
+                              </div>
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  {selectedClauses.size === 0 && (
+                    <div className="mt-4 p-4 bg-amber-50 border border-amber-200 rounded-xl">
+                      <div className="flex items-center gap-2 text-amber-800">
+                        <AlertCircle className="w-4 h-4" />
+                        <span className="text-sm font-medium">
+                          Selecciona al menos una cláusula para crear el contrato
+                        </span>
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                {/* Columna Derecha - Detalles del Contrato */}
+                <div className="space-y-6">
+                  {/* Nombre del contrato */}
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">
+                      Nombre del Contrato *
+                    </label>
+                    <input
+                      type="text"
+                      className="input-field"
+                      placeholder="Ej: Contrato de Servicios Profesionales"
+                    />
+                  </div>
+
+                  {/* Tipo de contrato */}
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">
+                      Tipo de Contrato
+                    </label>
+                    <select className="input-field">
+                      <option>Servicios</option>
+                      <option>Consultoría</option>
+                      <option>Mantenimiento</option>
+                      <option>Licencia</option>
+                      <option>NDA</option>
+                      <option>Otro</option>
+                    </select>
+                  </div>
+
+                  {/* Cliente */}
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">
+                      Cliente
+                    </label>
+                    <input
+                      type="text"
+                      className="input-field"
+                      placeholder="Nombre del cliente"
+                    />
+                  </div>
+
+                  {/* Resumen de cláusulas seleccionadas */}
+                  <div className="bg-gradient-to-br from-blue-50 to-purple-50 rounded-xl p-4">
+                    <h5 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
+                      <FileText className="w-4 h-4 text-blue-600" />
+                      Cláusulas Seleccionadas ({selectedClauses.size})
+                    </h5>
+                    {selectedClauses.size > 0 ? (
+                      <div className="space-y-2 max-h-40 overflow-y-auto">
+                        {Array.from(selectedClauses).map(clauseId => {
+                          const clause = mockClauses.find(c => c.id === clauseId);
+                          if (!clause) return null;
+                          return (
+                            <div key={clauseId} className="flex items-center gap-2 text-sm">
+                              <div className="w-1.5 h-1.5 rounded-full bg-blue-600"></div>
+                              <span className="text-gray-700 font-medium">{clause.title}</span>
+                              <span className="text-xs text-gray-500 ml-auto">{clause.category}</span>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    ) : (
+                      <p className="text-sm text-gray-500 italic">
+                        Ninguna cláusula seleccionada
+                      </p>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Footer del Modal */}
+            <div className="border-t border-gray-200 p-6 bg-gray-50">
+              <div className="flex gap-3">
+                <button 
+                  disabled={selectedClauses.size === 0}
+                  className="btn-primary flex-1 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  <Plus className="w-4 h-4" />
+                  Crear Contrato con {selectedClauses.size} Cláusulas
+                </button>
+                <button 
+                  onClick={() => setShowCreateContract(false)}
+                  className="btn-secondary px-6"
+                >
+                  Cancelar
+                </button>
+              </div>
             </div>
           </div>
         </div>
