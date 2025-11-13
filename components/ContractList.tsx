@@ -75,64 +75,77 @@ export default function ContractList({ contracts, onContractClick }: ContractLis
         return (
           <div 
             key={contract.id} 
-            className="card hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 flex flex-col h-full group cursor-pointer"
+            className="group relative bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg shadow-gray-200/50 border border-gray-200/50 hover:shadow-xl hover:shadow-gray-300/50 hover:-translate-y-2 transition-all duration-300 flex flex-col h-full cursor-pointer overflow-hidden"
             onClick={() => onContractClick?.(contract)}
           >
-            <div className="flex items-start justify-between mb-4">
-              <h3 className="text-lg font-semibold text-primary-dark flex-1 pr-2 leading-tight group-hover:text-primary-dark/80 transition-colors">
-                {contract.title}
-              </h3>
-              <div className={`status-badge ${statusConfig_item.color} ${statusConfig_item.textColor} flex items-center gap-1.5 flex-shrink-0`}>
-                <StatusIcon className="w-3.5 h-3.5" />
-                <span className="text-xs">{statusConfig_item.label}</span>
-              </div>
-            </div>
-
-            <div className="space-y-2.5 mb-4 flex-grow">
-              <div className="flex items-center gap-2 text-gray-600 text-sm">
-                <FileText className="w-4 h-4 text-gray-400 flex-shrink-0" />
-                <span className="font-medium text-gray-700">Cliente:</span>
-                <span className="text-gray-600">{contract.client}</span>
-              </div>
-
-              <div className="flex items-center gap-2 text-gray-600 text-sm">
-                <Calendar className="w-4 h-4 text-gray-400 flex-shrink-0" />
-                <span className="font-medium text-gray-700">Creado:</span>
-                <span className="text-gray-600">{new Date(contract.createdDate).toLocaleDateString('es-ES')}</span>
-              </div>
-
-              {contract.description && (
-                <p className="text-sm text-gray-600 mt-3 line-clamp-2 leading-relaxed">{contract.description}</p>
-              )}
-
-              {contract.riskLevel && contract.riskLevel !== 'bajo' && (
-                <div className="mt-3 flex items-center gap-2 text-sm">
-                  <AlertTriangle className={`w-4 h-4 flex-shrink-0 ${
-                    contract.riskLevel === 'critico' ? 'text-red-600' :
-                    contract.riskLevel === 'alto' ? 'text-orange-600' :
-                    'text-amber-600'
-                  }`} />
-                  <span className={`font-medium ${
-                    contract.riskLevel === 'critico' ? 'text-red-700' :
-                    contract.riskLevel === 'alto' ? 'text-orange-700' :
-                    'text-amber-700'
-                  }`}>
-                    Riesgo {contract.riskLevel}
-                  </span>
+            {/* Decorative gradient */}
+            <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500"></div>
+            
+            <div className="p-6 flex flex-col h-full">
+              <div className="flex items-start justify-between mb-4">
+                <h3 className="text-lg font-bold text-gray-900 flex-1 pr-2 leading-tight group-hover:text-blue-600 transition-colors">
+                  {contract.title}
+                </h3>
+                <div className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold ${statusConfig_item.color} ${statusConfig_item.textColor} shadow-sm flex-shrink-0`}>
+                  <StatusIcon className="w-3.5 h-3.5" />
+                  <span>{statusConfig_item.label}</span>
                 </div>
-              )}
-            </div>
+              </div>
 
-            <div className="mt-auto pt-4 border-t border-gray-100">
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  onContractClick?.(contract);
-                }}
-                className="w-full btn-primary text-sm py-2.5 group-hover:shadow-md transition-all"
-              >
-                Ver Detalles
-              </button>
+              <div className="space-y-3 mb-4 flex-grow">
+                <div className="flex items-center gap-2.5 text-sm">
+                  <div className="bg-blue-50 p-1.5 rounded-lg">
+                    <FileText className="w-3.5 h-3.5 text-blue-600" />
+                  </div>
+                  <span className="font-semibold text-gray-700">Cliente:</span>
+                  <span className="text-gray-600">{contract.client}</span>
+                </div>
+
+                <div className="flex items-center gap-2.5 text-sm">
+                  <div className="bg-purple-50 p-1.5 rounded-lg">
+                    <Calendar className="w-3.5 h-3.5 text-purple-600" />
+                  </div>
+                  <span className="font-semibold text-gray-700">Creado:</span>
+                  <span className="text-gray-600">{new Date(contract.createdDate).toLocaleDateString('es-ES')}</span>
+                </div>
+
+                {contract.description && (
+                  <p className="text-sm text-gray-600 mt-3 line-clamp-2 leading-relaxed">{contract.description}</p>
+                )}
+
+                {contract.riskLevel && contract.riskLevel !== 'bajo' && (
+                  <div className={`mt-3 flex items-center gap-2 px-3 py-2 rounded-xl text-sm ${
+                    contract.riskLevel === 'critico' ? 'bg-red-50' :
+                    contract.riskLevel === 'alto' ? 'bg-orange-50' :
+                    'bg-amber-50'
+                  }`}>
+                    <AlertTriangle className={`w-4 h-4 flex-shrink-0 ${
+                      contract.riskLevel === 'critico' ? 'text-red-600' :
+                      contract.riskLevel === 'alto' ? 'text-orange-600' :
+                      'text-amber-600'
+                    }`} />
+                    <span className={`font-semibold ${
+                      contract.riskLevel === 'critico' ? 'text-red-700' :
+                      contract.riskLevel === 'alto' ? 'text-orange-700' :
+                      'text-amber-700'
+                    }`}>
+                      Riesgo {contract.riskLevel}
+                    </span>
+                  </div>
+                )}
+              </div>
+
+              <div className="mt-auto pt-4">
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onContractClick?.(contract);
+                  }}
+                  className="w-full btn-primary text-sm py-3 group-hover:shadow-lg transition-all"
+                >
+                  Ver Detalles
+                </button>
+              </div>
             </div>
           </div>
         );

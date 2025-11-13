@@ -50,29 +50,44 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-gray-50/50">
-      {/* Header */}
-      <header className="bg-gradient-to-r from-primary-dark to-primary-dark/95 text-white shadow-md">
-        <div className="container mx-auto px-4 py-5">
+      {/* Modern Header with Glassmorphism */}
+      <header className="sticky top-0 z-40 backdrop-blur-xl bg-gradient-to-r from-slate-900/95 via-slate-800/95 to-slate-900/95 border-b border-white/10 shadow-2xl">
+        <div className="container mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <FileText className="w-7 h-7" />
-              <h1 className="text-xl font-semibold">Plataforma CLM</h1>
+            <div className="flex items-center gap-4 group">
+              <div className="relative">
+                <div className="absolute inset-0 bg-blue-500/20 blur-xl rounded-full group-hover:bg-blue-500/30 transition-all duration-300"></div>
+                <div className="relative bg-gradient-to-br from-blue-500 to-purple-600 p-2.5 rounded-xl shadow-lg group-hover:scale-110 transition-transform duration-300">
+                  <FileText className="w-6 h-6 text-white" />
+                </div>
+              </div>
+              <div>
+                <h1 className="text-2xl font-bold bg-gradient-to-r from-white to-blue-100 bg-clip-text text-transparent">
+                  Plataforma CLM
+                </h1>
+                <p className="text-xs text-gray-400 font-medium">Contract Lifecycle Management</p>
+              </div>
             </div>
-            <nav className="flex flex-wrap gap-1.5">
+            <nav className="flex flex-wrap gap-2">
               {/* Screen 1: Contratos, Cláusulas, Market */}
               <button
                 onClick={() => {
                   setActiveScreen('screen1');
                   setScreen1View('contracts');
                 }}
-                className={`px-3 py-1.5 rounded-md transition-all duration-200 text-sm font-medium ${
+                className={`group relative px-5 py-2.5 rounded-xl text-sm font-semibold transition-all duration-300 ${
                   activeScreen === 'screen1'
-                    ? 'bg-accent text-white shadow-sm'
-                    : 'hover:bg-white/10 text-white/90'
+                    ? 'bg-gradient-to-r from-blue-600 to-blue-500 text-white shadow-lg shadow-blue-500/50'
+                    : 'text-gray-300 hover:text-white hover:bg-white/10'
                 }`}
               >
-                <FileText className="w-4 h-4 inline mr-1.5" />
-                Repositorio
+                <div className="flex items-center gap-2">
+                  <FileText className="w-4 h-4" />
+                  <span>Repositorio</span>
+                </div>
+                {activeScreen === 'screen1' && (
+                  <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-white to-transparent"></div>
+                )}
               </button>
               {/* Screen 2: Solicitudes/Ticketing */}
               <button
@@ -80,14 +95,19 @@ export default function Home() {
                   setActiveScreen('screen2');
                   setScreen2View('dashboard');
                 }}
-                className={`px-3 py-1.5 rounded-md transition-all duration-200 text-sm font-medium ${
+                className={`group relative px-5 py-2.5 rounded-xl text-sm font-semibold transition-all duration-300 ${
                   activeScreen === 'screen2'
-                    ? 'bg-accent text-white shadow-sm'
-                    : 'hover:bg-white/10 text-white/90'
+                    ? 'bg-gradient-to-r from-blue-600 to-blue-500 text-white shadow-lg shadow-blue-500/50'
+                    : 'text-gray-300 hover:text-white hover:bg-white/10'
                 }`}
               >
-                <Ticket className="w-4 h-4 inline mr-1.5" />
-                Solicitudes
+                <div className="flex items-center gap-2">
+                  <Ticket className="w-4 h-4" />
+                  <span>Solicitudes</span>
+                </div>
+                {activeScreen === 'screen2' && (
+                  <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-white to-transparent"></div>
+                )}
               </button>
               {/* Screen 3: Gestor CLM */}
               <button
@@ -95,14 +115,19 @@ export default function Home() {
                   setActiveScreen('screen3');
                   setScreen3View('lifecycle');
                 }}
-                className={`px-3 py-1.5 rounded-md transition-all duration-200 text-sm font-medium ${
+                className={`group relative px-5 py-2.5 rounded-xl text-sm font-semibold transition-all duration-300 ${
                   activeScreen === 'screen3'
-                    ? 'bg-accent text-white shadow-sm'
-                    : 'hover:bg-white/10 text-white/90'
+                    ? 'bg-gradient-to-r from-blue-600 to-blue-500 text-white shadow-lg shadow-blue-500/50'
+                    : 'text-gray-300 hover:text-white hover:bg-white/10'
                 }`}
               >
-                <Activity className="w-4 h-4 inline mr-1.5" />
-                Gestor CLM
+                <div className="flex items-center gap-2">
+                  <Activity className="w-4 h-4" />
+                  <span>Gestor CLM</span>
+                </div>
+                {activeScreen === 'screen3' && (
+                  <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-white to-transparent"></div>
+                )}
               </button>
             </nav>
           </div>
@@ -114,41 +139,47 @@ export default function Home() {
         {/* SCREEN 1: Repositorio (Contratos, Cláusulas, Market) */}
         {activeScreen === 'screen1' && (
           <>
-            {/* Submenu for Screen 1 */}
-            <div className="mb-6 bg-white rounded-lg shadow-sm border border-gray-200 p-3">
-              <div className="flex flex-wrap gap-2">
+            {/* Modern Submenu for Screen 1 */}
+            <div className="mb-8 backdrop-blur-sm bg-white/70 rounded-2xl shadow-lg border border-gray-200/50 p-4">
+              <div className="flex flex-wrap gap-3">
                 <button
                   onClick={() => setScreen1View('contracts')}
-                  className={`px-4 py-2 rounded-md text-sm font-medium transition-all ${
+                  className={`group relative px-5 py-3 rounded-xl text-sm font-semibold transition-all duration-300 ${
                     screen1View === 'contracts'
-                      ? 'bg-primary text-white'
-                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                      ? 'bg-gradient-to-r from-blue-600 to-blue-500 text-white shadow-lg shadow-blue-500/30'
+                      : 'bg-gray-50 text-gray-700 hover:bg-white hover:shadow-md'
                   }`}
                 >
-                  <FileText className="w-4 h-4 inline mr-1.5" />
-                  Contratos
+                  <div className="flex items-center gap-2">
+                    <FileText className="w-4 h-4" />
+                    <span>Contratos</span>
+                  </div>
                 </button>
                 <button
                   onClick={() => setScreen1View('clauses')}
-                  className={`px-4 py-2 rounded-md text-sm font-medium transition-all ${
+                  className={`group relative px-5 py-3 rounded-xl text-sm font-semibold transition-all duration-300 ${
                     screen1View === 'clauses'
-                      ? 'bg-primary text-white'
-                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                      ? 'bg-gradient-to-r from-blue-600 to-blue-500 text-white shadow-lg shadow-blue-500/30'
+                      : 'bg-gray-50 text-gray-700 hover:bg-white hover:shadow-md'
                   }`}
                 >
-                  <BookOpen className="w-4 h-4 inline mr-1.5" />
-                  Cláusulas
+                  <div className="flex items-center gap-2">
+                    <BookOpen className="w-4 h-4" />
+                    <span>Cláusulas</span>
+                  </div>
                 </button>
                 <button
                   onClick={() => setScreen1View('market')}
-                  className={`px-4 py-2 rounded-md text-sm font-medium transition-all ${
+                  className={`group relative px-5 py-3 rounded-xl text-sm font-semibold transition-all duration-300 ${
                     screen1View === 'market'
-                      ? 'bg-primary text-white'
-                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                      ? 'bg-gradient-to-r from-blue-600 to-blue-500 text-white shadow-lg shadow-blue-500/30'
+                      : 'bg-gray-50 text-gray-700 hover:bg-white hover:shadow-md'
                   }`}
                 >
-                  <ShoppingCart className="w-4 h-4 inline mr-1.5" />
-                  Supermarket
+                  <div className="flex items-center gap-2">
+                    <ShoppingCart className="w-4 h-4" />
+                    <span>Supermarket</span>
+                  </div>
                 </button>
               </div>
             </div>
@@ -199,41 +230,47 @@ export default function Home() {
         {/* SCREEN 2: Solicitudes/Ticketing */}
         {activeScreen === 'screen2' && (
           <>
-            {/* Submenu for Screen 2 */}
-            <div className="mb-6 bg-white rounded-lg shadow-sm border border-gray-200 p-3">
-              <div className="flex flex-wrap gap-2">
+            {/* Modern Submenu for Screen 2 */}
+            <div className="mb-8 backdrop-blur-sm bg-white/70 rounded-2xl shadow-lg border border-gray-200/50 p-4">
+              <div className="flex flex-wrap gap-3">
                 <button
                   onClick={() => setScreen2View('dashboard')}
-                  className={`px-4 py-2 rounded-md text-sm font-medium transition-all ${
+                  className={`group relative px-5 py-3 rounded-xl text-sm font-semibold transition-all duration-300 ${
                     screen2View === 'dashboard'
-                      ? 'bg-primary text-white'
-                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                      ? 'bg-gradient-to-r from-blue-600 to-blue-500 text-white shadow-lg shadow-blue-500/30'
+                      : 'bg-gray-50 text-gray-700 hover:bg-white hover:shadow-md'
                   }`}
                 >
-                  <Activity className="w-4 h-4 inline mr-1.5" />
-                  Dashboard
+                  <div className="flex items-center gap-2">
+                    <Activity className="w-4 h-4" />
+                    <span>Dashboard</span>
+                  </div>
                 </button>
                 <button
                   onClick={() => setScreen2View('requests')}
-                  className={`px-4 py-2 rounded-md text-sm font-medium transition-all ${
+                  className={`group relative px-5 py-3 rounded-xl text-sm font-semibold transition-all duration-300 ${
                     screen2View === 'requests'
-                      ? 'bg-primary text-white'
-                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                      ? 'bg-gradient-to-r from-blue-600 to-blue-500 text-white shadow-lg shadow-blue-500/30'
+                      : 'bg-gray-50 text-gray-700 hover:bg-white hover:shadow-md'
                   }`}
                 >
-                  <Ticket className="w-4 h-4 inline mr-1.5" />
-                  Vista de Solicitudes
+                  <div className="flex items-center gap-2">
+                    <Ticket className="w-4 h-4" />
+                    <span>Vista de Solicitudes</span>
+                  </div>
                 </button>
                 <button
                   onClick={() => setScreen2View('new-request')}
-                  className={`px-4 py-2 rounded-md text-sm font-medium transition-all ${
+                  className={`group relative px-5 py-3 rounded-xl text-sm font-semibold transition-all duration-300 ${
                     screen2View === 'new-request'
-                      ? 'bg-primary text-white'
-                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                      ? 'bg-gradient-to-r from-blue-600 to-blue-500 text-white shadow-lg shadow-blue-500/30'
+                      : 'bg-gray-50 text-gray-700 hover:bg-white hover:shadow-md'
                   }`}
                 >
-                  <Plus className="w-4 h-4 inline mr-1.5" />
-                  Nueva Solicitud
+                  <div className="flex items-center gap-2">
+                    <Plus className="w-4 h-4" />
+                    <span>Nueva Solicitud</span>
+                  </div>
                 </button>
               </div>
             </div>
@@ -286,10 +323,29 @@ export default function Home() {
         )}
       </main>
 
-      {/* Footer */}
-      <footer className="bg-gray-800 text-white mt-12 py-6">
-        <div className="container mx-auto px-4 text-center">
-          <p className="text-sm">Plataforma CLM - Contract Lifecycle Management</p>
+      {/* Modern Footer */}
+      <footer className="relative mt-20 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white overflow-hidden">
+        <div className="absolute inset-0 bg-grid-pattern opacity-5"></div>
+        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-blue-500/50 to-transparent"></div>
+        <div className="relative container mx-auto px-6 py-10">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+            <div className="flex items-center gap-4">
+              <div className="bg-gradient-to-br from-blue-500 to-purple-600 p-3 rounded-xl shadow-lg">
+                <FileText className="w-6 h-6 text-white" />
+              </div>
+              <div>
+                <h3 className="text-lg font-bold bg-gradient-to-r from-white to-blue-100 bg-clip-text text-transparent">
+                  Plataforma CLM
+                </h3>
+                <p className="text-sm text-gray-400">Contract Lifecycle Management</p>
+              </div>
+            </div>
+            <div className="text-center md:text-right">
+              <p className="text-sm text-gray-400">
+                © 2025 Plataforma CLM. Diseñado para el futuro de la gestión contractual.
+              </p>
+            </div>
+          </div>
         </div>
       </footer>
 

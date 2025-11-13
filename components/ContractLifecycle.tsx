@@ -101,62 +101,84 @@ export default function ContractLifecycle({ contracts, onContractClick }: Contra
         </div>
       </div>
 
-      {/* Control Panel - Key Indicators */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm text-gray-500 mb-1">Total Contratos</p>
-              <p className="text-2xl font-bold text-primary-dark">{totalContracts}</p>
+      {/* Modern Control Panel - Key Indicators */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
+        {/* Total Contratos */}
+        <div className="group relative bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl p-6 text-white shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300 overflow-hidden">
+          <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -mr-16 -mt-16"></div>
+          <div className="relative">
+            <div className="flex items-center justify-between mb-3">
+              <div className="bg-white/20 backdrop-blur-sm p-2.5 rounded-xl">
+                <FileText className="w-5 h-5" />
+              </div>
             </div>
-            <FileText className="w-8 h-8 text-primary" />
+            <p className="text-sm font-medium text-blue-100 mb-1">Total Contratos</p>
+            <p className="text-3xl font-bold">{totalContracts}</p>
           </div>
         </div>
 
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm text-gray-500 mb-1">Activos</p>
-              <p className="text-2xl font-bold text-green-600">{activeContracts}</p>
+        {/* Activos */}
+        <div className="group relative bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-2xl p-6 text-white shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300 overflow-hidden">
+          <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -mr-16 -mt-16"></div>
+          <div className="relative">
+            <div className="flex items-center justify-between mb-3">
+              <div className="bg-white/20 backdrop-blur-sm p-2.5 rounded-xl">
+                <Activity className="w-5 h-5" />
+              </div>
             </div>
-            <Activity className="w-8 h-8 text-green-600" />
+            <p className="text-sm font-medium text-emerald-100 mb-1">Activos</p>
+            <p className="text-3xl font-bold">{activeContracts}</p>
           </div>
         </div>
 
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm text-gray-500 mb-1">Próximos a Vencer</p>
-              <p className="text-2xl font-bold text-orange-600">{expiringContracts}</p>
-              <p className="text-xs text-gray-400">{"<90 días"}</p>
+        {/* Próximos a Vencer */}
+        <div className="group relative bg-gradient-to-br from-orange-500 to-orange-600 rounded-2xl p-6 text-white shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300 overflow-hidden">
+          <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -mr-16 -mt-16"></div>
+          <div className="relative">
+            <div className="flex items-center justify-between mb-3">
+              <div className="bg-white/20 backdrop-blur-sm p-2.5 rounded-xl">
+                <Clock className="w-5 h-5" />
+              </div>
             </div>
-            <Clock className="w-8 h-8 text-orange-600" />
+            <p className="text-sm font-medium text-orange-100 mb-1">Próximos a Vencer</p>
+            <div className="flex items-baseline gap-2">
+              <p className="text-3xl font-bold">{expiringContracts}</p>
+              <span className="text-xs text-orange-200">{"<90 días"}</span>
+            </div>
           </div>
         </div>
 
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm text-gray-500 mb-1">En Renovación</p>
-              <p className="text-2xl font-bold text-blue-600">{renewalContracts}</p>
+        {/* En Renovación */}
+        <div className="group relative bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl p-6 text-white shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300 overflow-hidden">
+          <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -mr-16 -mt-16"></div>
+          <div className="relative">
+            <div className="flex items-center justify-between mb-3">
+              <div className="bg-white/20 backdrop-blur-sm p-2.5 rounded-xl">
+                <RotateCw className="w-5 h-5" />
+              </div>
             </div>
-            <RotateCw className="w-8 h-8 text-blue-600" />
+            <p className="text-sm font-medium text-purple-100 mb-1">En Renovación</p>
+            <p className="text-3xl font-bold">{renewalContracts}</p>
           </div>
         </div>
 
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm text-gray-500 mb-1">Valor Total</p>
-              <p className="text-2xl font-bold text-primary-dark">
-                {new Intl.NumberFormat('es-ES', { 
-                  style: 'currency', 
-                  currency: 'EUR',
-                  maximumFractionDigits: 0
-                }).format(totalValue)}
-              </p>
+        {/* Valor Total */}
+        <div className="group relative bg-gradient-to-br from-amber-500 to-amber-600 rounded-2xl p-6 text-white shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300 overflow-hidden">
+          <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -mr-16 -mt-16"></div>
+          <div className="relative">
+            <div className="flex items-center justify-between mb-3">
+              <div className="bg-white/20 backdrop-blur-sm p-2.5 rounded-xl">
+                <TrendingUp className="w-5 h-5" />
+              </div>
             </div>
-            <TrendingUp className="w-8 h-8 text-primary" />
+            <p className="text-sm font-medium text-amber-100 mb-1">Valor Total</p>
+            <p className="text-2xl font-bold">
+              {new Intl.NumberFormat('es-ES', { 
+                style: 'currency', 
+                currency: 'EUR',
+                maximumFractionDigits: 0
+              }).format(totalValue)}
+            </p>
           </div>
         </div>
       </div>

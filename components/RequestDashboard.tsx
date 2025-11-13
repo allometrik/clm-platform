@@ -70,45 +70,61 @@ export default function RequestDashboard({ requests }: RequestDashboardProps) {
 
   return (
     <div className="space-y-6">
-      {/* Statistics Panel */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm text-gray-500 mb-1">Total Solicitudes</p>
-              <p className="text-2xl font-bold text-primary-dark">{totalRequests}</p>
+      {/* Modern Statistics Panel */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {/* Total Solicitudes */}
+        <div className="group relative bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl p-6 text-white shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300 overflow-hidden">
+          <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -mr-16 -mt-16"></div>
+          <div className="relative">
+            <div className="flex items-center justify-between mb-3">
+              <div className="bg-white/20 backdrop-blur-sm p-2.5 rounded-xl">
+                <Ticket className="w-5 h-5" />
+              </div>
             </div>
-            <Ticket className="w-8 h-8 text-primary" />
+            <p className="text-sm font-medium text-blue-100 mb-1">Total Solicitudes</p>
+            <p className="text-3xl font-bold">{totalRequests}</p>
           </div>
         </div>
 
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm text-gray-500 mb-1">Nuevas</p>
-              <p className="text-2xl font-bold text-blue-600">{newRequests}</p>
+        {/* Nuevas */}
+        <div className="group relative bg-gradient-to-br from-indigo-500 to-indigo-600 rounded-2xl p-6 text-white shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300 overflow-hidden">
+          <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -mr-16 -mt-16"></div>
+          <div className="relative">
+            <div className="flex items-center justify-between mb-3">
+              <div className="bg-white/20 backdrop-blur-sm p-2.5 rounded-xl">
+                <AlertCircle className="w-5 h-5" />
+              </div>
             </div>
-            <AlertCircle className="w-8 h-8 text-blue-600" />
+            <p className="text-sm font-medium text-indigo-100 mb-1">Nuevas</p>
+            <p className="text-3xl font-bold">{newRequests}</p>
           </div>
         </div>
 
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm text-gray-500 mb-1">En Proceso</p>
-              <p className="text-2xl font-bold text-orange-600">{inProgressRequests}</p>
+        {/* En Proceso */}
+        <div className="group relative bg-gradient-to-br from-orange-500 to-orange-600 rounded-2xl p-6 text-white shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300 overflow-hidden">
+          <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -mr-16 -mt-16"></div>
+          <div className="relative">
+            <div className="flex items-center justify-between mb-3">
+              <div className="bg-white/20 backdrop-blur-sm p-2.5 rounded-xl">
+                <Clock className="w-5 h-5" />
+              </div>
             </div>
-            <Clock className="w-8 h-8 text-orange-600" />
+            <p className="text-sm font-medium text-orange-100 mb-1">En Proceso</p>
+            <p className="text-3xl font-bold">{inProgressRequests}</p>
           </div>
         </div>
 
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm text-gray-500 mb-1">Completadas</p>
-              <p className="text-2xl font-bold text-green-600">{completedRequests}</p>
+        {/* Completadas */}
+        <div className="group relative bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-2xl p-6 text-white shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300 overflow-hidden">
+          <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -mr-16 -mt-16"></div>
+          <div className="relative">
+            <div className="flex items-center justify-between mb-3">
+              <div className="bg-white/20 backdrop-blur-sm p-2.5 rounded-xl">
+                <CheckCircle className="w-5 h-5" />
+              </div>
             </div>
-            <CheckCircle className="w-8 h-8 text-green-600" />
+            <p className="text-sm font-medium text-emerald-100 mb-1">Completadas</p>
+            <p className="text-3xl font-bold">{completedRequests}</p>
           </div>
         </div>
       </div>
