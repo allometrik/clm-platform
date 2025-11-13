@@ -15,7 +15,7 @@ import SearchBar from '@/components/SearchBar';
 import { FileText, Plus, BookOpen, Ticket, ShoppingCart, Scale, Search, Activity } from 'lucide-react';
 
 type MainScreen = 'screen1' | 'screen2' | 'screen3';
-type Screen1View = 'contracts' | 'clauses' | 'market';
+type Screen1View = 'clauses' | 'contracts' | 'market';
 type Screen2View = 'requests' | 'new-request' | 'dashboard';
 type Screen3View = 'lifecycle';
 
@@ -23,7 +23,7 @@ export default function Home() {
   const [contracts, setContracts] = useState(mockContracts);
   const [requests] = useState(mockRequests);
   const [activeScreen, setActiveScreen] = useState<MainScreen>('screen1');
-  const [screen1View, setScreen1View] = useState<Screen1View>('contracts');
+  const [screen1View, setScreen1View] = useState<Screen1View>('clauses');
   const [screen2View, setScreen2View] = useState<Screen2View>('dashboard');
   const [screen3View, setScreen3View] = useState<Screen3View>('lifecycle');
   const [selectedContract, setSelectedContract] = useState<Contract | null>(null);
@@ -73,7 +73,7 @@ export default function Home() {
               <button
                 onClick={() => {
                   setActiveScreen('screen1');
-                  setScreen1View('contracts');
+                  setScreen1View('clauses');
                 }}
                 className={`group relative px-5 py-2.5 rounded-xl text-sm font-semibold transition-all duration-300 ${
                   activeScreen === 'screen1'
@@ -143,6 +143,19 @@ export default function Home() {
             <div className="mb-8 backdrop-blur-sm bg-white/70 rounded-2xl shadow-lg border border-gray-200/50 p-4">
               <div className="flex flex-wrap gap-3">
                 <button
+                  onClick={() => setScreen1View('clauses')}
+                  className={`group relative px-5 py-3 rounded-xl text-sm font-semibold transition-all duration-300 ${
+                    screen1View === 'clauses'
+                      ? 'bg-gradient-to-r from-orange-500 to-orange-600 text-white shadow-lg shadow-orange-500/30'
+                      : 'bg-gray-50 text-gray-700 hover:bg-white hover:shadow-md'
+                  }`}
+                >
+                  <div className="flex items-center gap-2">
+                    <BookOpen className="w-4 h-4" />
+                    <span>Cláusulas</span>
+                  </div>
+                </button>
+                <button
                   onClick={() => setScreen1View('contracts')}
                   className={`group relative px-5 py-3 rounded-xl text-sm font-semibold transition-all duration-300 ${
                     screen1View === 'contracts'
@@ -156,23 +169,10 @@ export default function Home() {
                   </div>
                 </button>
                 <button
-                  onClick={() => setScreen1View('clauses')}
-                  className={`group relative px-5 py-3 rounded-xl text-sm font-semibold transition-all duration-300 ${
-                    screen1View === 'clauses'
-                      ? 'bg-gradient-to-r from-blue-600 to-blue-500 text-white shadow-lg shadow-blue-500/30'
-                      : 'bg-gray-50 text-gray-700 hover:bg-white hover:shadow-md'
-                  }`}
-                >
-                  <div className="flex items-center gap-2">
-                    <BookOpen className="w-4 h-4" />
-                    <span>Cláusulas</span>
-                  </div>
-                </button>
-                <button
                   onClick={() => setScreen1View('market')}
                   className={`group relative px-5 py-3 rounded-xl text-sm font-semibold transition-all duration-300 ${
                     screen1View === 'market'
-                      ? 'bg-gradient-to-r from-blue-600 to-blue-500 text-white shadow-lg shadow-blue-500/30'
+                      ? 'bg-gradient-to-r from-purple-600 to-purple-500 text-white shadow-lg shadow-purple-500/30'
                       : 'bg-gray-50 text-gray-700 hover:bg-white hover:shadow-md'
                   }`}
                 >
@@ -185,6 +185,12 @@ export default function Home() {
             </div>
 
             {/* Screen 1 Content */}
+            {screen1View === 'clauses' && (
+              <div className="space-y-6">
+                <ClauseLibrary />
+              </div>
+            )}
+
             {screen1View === 'contracts' && (
               <div className="space-y-6">
                 <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 pb-2 border-b border-gray-200">
@@ -209,15 +215,6 @@ export default function Home() {
                   contracts={filteredContracts}
                   onContractClick={setSelectedContract}
                 />
-              </div>
-            )}
-
-            {screen1View === 'clauses' && (
-              <div className="space-y-6">
-                <div className="flex items-center gap-4">
-                  <h2 className="text-2xl font-semibold text-primary-dark">Biblioteca de Cláusulas</h2>
-                </div>
-                <ClauseLibrary />
               </div>
             )}
 
