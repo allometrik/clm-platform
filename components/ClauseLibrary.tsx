@@ -229,7 +229,11 @@ export default function ClauseLibrary({ initialClauseId, onClauseSelected }: Cla
         };
         selectClause(clauseNode);
         // Expandir la categoría de la cláusula
-        setExpandedCategories(prev => new Set([...prev, clause.category]));
+        setExpandedCategories(prev => {
+          const newSet = new Set(prev);
+          newSet.add(clause.category);
+          return newSet;
+        });
       }
     }
   }, [initialClauseId]);
