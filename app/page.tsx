@@ -48,7 +48,7 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-gray-50/50">
       {/* Santander Header */}
-      <header className="sticky top-0 z-40 bg-gradient-to-r from-[#222222] via-[#333333] to-[#222222] border-b border-[#EC0000]/30 shadow-2xl">
+      <header className="sticky top-0 z-40 bg-gradient-to-r from-gray-200 via-gray-100 to-gray-200 border-b border-gray-300 shadow-lg">
         <div className="container mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4 group">
@@ -60,7 +60,7 @@ export default function Home() {
                 />
               </div>
               <div>
-                <h1 className="text-2xl font-bold text-white">
+                <h1 className="text-2xl font-bold text-gray-800">
                   Plataforma de Accesibilidad
                 </h1>
               </div>
@@ -71,7 +71,7 @@ export default function Home() {
                 href="https://compiagent.streamlit.app/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group relative px-5 py-2.5 rounded-xl text-sm font-semibold transition-all duration-300 text-white/80 hover:text-white hover:bg-white/10 border border-white/10"
+                className="group relative px-5 py-2.5 rounded-xl text-sm font-semibold transition-all duration-300 text-gray-600 hover:text-gray-900 hover:bg-gray-200/50 border border-gray-300"
               >
                 <div className="flex items-center gap-2">
                   <ExternalLink className="w-4 h-4" />
@@ -86,8 +86,8 @@ export default function Home() {
                 }}
                 className={`group relative px-5 py-2.5 rounded-xl text-sm font-semibold transition-all duration-300 ${
                   activeScreen === 'screen1'
-                    ? 'bg-gradient-to-r from-[#EC0000] to-[#C50000] text-white shadow-lg shadow-[#EC0000]/50'
-                    : 'text-white/80 hover:text-white hover:bg-white/10 border border-white/10'
+                    ? 'bg-gradient-to-r from-[#EC0000] to-[#C50000] text-white shadow-lg shadow-[#EC0000]/30'
+                    : 'text-gray-600 hover:text-gray-900 hover:bg-gray-200/50 border border-gray-300'
                 }`}
               >
                 <div className="flex items-center gap-2">
@@ -95,7 +95,7 @@ export default function Home() {
                   <span>Gestor de Contratos</span>
                 </div>
                 {activeScreen === 'screen1' && (
-                  <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-white to-transparent"></div>
+                  <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-[#EC0000] to-transparent"></div>
                 )}
               </button>
             </nav>
