@@ -5,7 +5,7 @@ import './globals.css'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'Plataforma CLM - Contract Lifecycle Management',
+  title: 'Plataforma de Accesibilidad',
   description: 'Plataforma completa de gestión del ciclo de vida de contratos - CLM',
 }
 

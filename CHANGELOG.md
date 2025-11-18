@@ -183,7 +183,7 @@ Se han actualizado los contratos de ejemplo para incluir:
 - Datos de ejemplo actualizados
 
 #### Metadata de la App
-- Título actualizado: "Plataforma CLM - Contract Lifecycle Management"
+- Título actualizado: "Plataforma de Accesibilidad"
 - Descripción actualizada en layout.tsx
 
 ---

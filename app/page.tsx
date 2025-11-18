@@ -10,7 +10,7 @@ import RequestDashboard from '@/components/RequestDashboard';
 import TemplateSupermarket from '@/components/TemplateSupermarket';
 import LegalPlaybookView from '@/components/LegalPlaybook';
 import ContractLifecycle from '@/components/ContractLifecycle';
-import { FileText, Plus, BookOpen, Ticket, ShoppingCart, Scale, Search, Activity } from 'lucide-react';
+import { FileText, Plus, BookOpen, Ticket, ShoppingCart, Scale, Search, Activity, ExternalLink } from 'lucide-react';
 
 type MainScreen = 'screen1' | 'screen2' | 'screen3';
 type Screen1View = 'clauses' | 'contracts' | 'market';
@@ -24,6 +24,7 @@ export default function Home() {
   const [screen1View, setScreen1View] = useState<Screen1View>('clauses');
   const [screen2View, setScreen2View] = useState<Screen2View>('dashboard');
   const [screen3View, setScreen3View] = useState<Screen3View>('lifecycle');
+  const [selectedClauseId, setSelectedClauseId] = useState<string | null>(null);
 
   const handleGenerateContract = (contractData: any) => {
     const newContract = {
@@ -38,28 +39,46 @@ export default function Home() {
     setScreen1View('contracts');
   };
 
+  const handleNavigateToClause = (clauseId: string) => {
+    setSelectedClauseId(clauseId);
+    setActiveScreen('screen1');
+    setScreen1View('clauses');
+  };
+
   return (
     <div className="min-h-screen bg-gray-50/50">
-      {/* Modern Header with Glassmorphism */}
-      <header className="sticky top-0 z-40 backdrop-blur-xl bg-gradient-to-r from-slate-900/95 via-slate-800/95 to-slate-900/95 border-b border-white/10 shadow-2xl">
+      {/* Santander Header */}
+      <header className="sticky top-0 z-40 bg-gradient-to-r from-[#222222] via-[#333333] to-[#222222] border-b border-[#EC0000]/30 shadow-2xl">
         <div className="container mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4 group">
               <div className="relative">
-                <div className="absolute inset-0 bg-blue-500/20 blur-xl rounded-full group-hover:bg-blue-500/30 transition-all duration-300"></div>
-                <div className="relative bg-gradient-to-br from-blue-500 to-purple-600 p-2.5 rounded-xl shadow-lg group-hover:scale-110 transition-transform duration-300">
-                  <FileText className="w-6 h-6 text-white" />
-                </div>
+                <img 
+                  src="/images.png" 
+                  alt="Santander" 
+                  className="w-10 h-10 object-contain rounded-lg group-hover:scale-110 transition-transform duration-300"
+                />
               </div>
               <div>
-                <h1 className="text-2xl font-bold bg-gradient-to-r from-white to-blue-100 bg-clip-text text-transparent">
-                  Plataforma CLM
+                <h1 className="text-2xl font-bold text-white">
+                  Plataforma de Accesibilidad
                 </h1>
-                <p className="text-xs text-gray-400 font-medium">Contract Lifecycle Management</p>
               </div>
             </div>
             <nav className="flex flex-wrap gap-2">
-              {/* Screen 1: Contratos, Cláusulas, Market */}
+              {/* Herramienta de Accesibilidad - Enlace externo */}
+              <a
+                href="https://compiagent.streamlit.app/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group relative px-5 py-2.5 rounded-xl text-sm font-semibold transition-all duration-300 text-white/80 hover:text-white hover:bg-white/10 border border-white/10"
+              >
+                <div className="flex items-center gap-2">
+                  <ExternalLink className="w-4 h-4" />
+                  <span>Herramienta de Accesibilidad</span>
+                </div>
+              </a>
+              {/* Screen 1: Gestor de Contratos */}
               <button
                 onClick={() => {
                   setActiveScreen('screen1');
@@ -67,55 +86,15 @@ export default function Home() {
                 }}
                 className={`group relative px-5 py-2.5 rounded-xl text-sm font-semibold transition-all duration-300 ${
                   activeScreen === 'screen1'
-                    ? 'bg-gradient-to-r from-blue-600 to-blue-500 text-white shadow-lg shadow-blue-500/50'
-                    : 'text-gray-300 hover:text-white hover:bg-white/10'
+                    ? 'bg-gradient-to-r from-[#EC0000] to-[#C50000] text-white shadow-lg shadow-[#EC0000]/50'
+                    : 'text-white/80 hover:text-white hover:bg-white/10 border border-white/10'
                 }`}
               >
                 <div className="flex items-center gap-2">
                   <FileText className="w-4 h-4" />
-                  <span>Repositorio</span>
+                  <span>Gestor de Contratos</span>
                 </div>
                 {activeScreen === 'screen1' && (
-                  <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-white to-transparent"></div>
-                )}
-              </button>
-              {/* Screen 2: Solicitudes/Ticketing */}
-              <button
-                onClick={() => {
-                  setActiveScreen('screen2');
-                  setScreen2View('dashboard');
-                }}
-                className={`group relative px-5 py-2.5 rounded-xl text-sm font-semibold transition-all duration-300 ${
-                  activeScreen === 'screen2'
-                    ? 'bg-gradient-to-r from-blue-600 to-blue-500 text-white shadow-lg shadow-blue-500/50'
-                    : 'text-gray-300 hover:text-white hover:bg-white/10'
-                }`}
-              >
-                <div className="flex items-center gap-2">
-                  <Ticket className="w-4 h-4" />
-                  <span>Solicitudes</span>
-                </div>
-                {activeScreen === 'screen2' && (
-                  <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-white to-transparent"></div>
-                )}
-              </button>
-              {/* Screen 3: Gestor CLM */}
-              <button
-                onClick={() => {
-                  setActiveScreen('screen3');
-                  setScreen3View('lifecycle');
-                }}
-                className={`group relative px-5 py-2.5 rounded-xl text-sm font-semibold transition-all duration-300 ${
-                  activeScreen === 'screen3'
-                    ? 'bg-gradient-to-r from-blue-600 to-blue-500 text-white shadow-lg shadow-blue-500/50'
-                    : 'text-gray-300 hover:text-white hover:bg-white/10'
-                }`}
-              >
-                <div className="flex items-center gap-2">
-                  <Activity className="w-4 h-4" />
-                  <span>Gestor CLM</span>
-                </div>
-                {activeScreen === 'screen3' && (
                   <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-white to-transparent"></div>
                 )}
               </button>
@@ -129,14 +108,14 @@ export default function Home() {
         {/* SCREEN 1: Repositorio (Contratos, Cláusulas, Market) */}
         {activeScreen === 'screen1' && (
           <>
-            {/* Modern Submenu for Screen 1 */}
+            {/* Santander Submenu for Screen 1 */}
             <div className="mb-8 backdrop-blur-sm bg-white/70 rounded-2xl shadow-lg border border-gray-200/50 p-4">
               <div className="flex flex-wrap gap-3">
                 <button
                   onClick={() => setScreen1View('clauses')}
                   className={`group relative px-5 py-3 rounded-xl text-sm font-semibold transition-all duration-300 ${
                     screen1View === 'clauses'
-                      ? 'bg-gradient-to-r from-orange-500 to-orange-600 text-white shadow-lg shadow-orange-500/30'
+                      ? 'bg-gradient-to-r from-[#EC0000] to-[#C50000] text-white shadow-lg shadow-[#EC0000]/30'
                       : 'bg-gray-50 text-gray-700 hover:bg-white hover:shadow-md'
                   }`}
                 >
@@ -149,20 +128,20 @@ export default function Home() {
                   onClick={() => setScreen1View('contracts')}
                   className={`group relative px-5 py-3 rounded-xl text-sm font-semibold transition-all duration-300 ${
                     screen1View === 'contracts'
-                      ? 'bg-gradient-to-r from-blue-600 to-blue-500 text-white shadow-lg shadow-blue-500/30'
+                      ? 'bg-gradient-to-r from-[#EC0000] to-[#C50000] text-white shadow-lg shadow-[#EC0000]/30'
                       : 'bg-gray-50 text-gray-700 hover:bg-white hover:shadow-md'
                   }`}
                 >
                   <div className="flex items-center gap-2">
                     <FileText className="w-4 h-4" />
-                    <span>Contratos</span>
+                    <span>Plantillas</span>
                   </div>
                 </button>
                 <button
                   onClick={() => setScreen1View('market')}
                   className={`group relative px-5 py-3 rounded-xl text-sm font-semibold transition-all duration-300 ${
                     screen1View === 'market'
-                      ? 'bg-gradient-to-r from-purple-600 to-purple-500 text-white shadow-lg shadow-purple-500/30'
+                      ? 'bg-gradient-to-r from-[#EC0000] to-[#C50000] text-white shadow-lg shadow-[#EC0000]/30'
                       : 'bg-gray-50 text-gray-700 hover:bg-white hover:shadow-md'
                   }`}
                 >
@@ -177,12 +156,18 @@ export default function Home() {
             {/* Screen 1 Content */}
             {screen1View === 'clauses' && (
               <div className="space-y-6">
-                <ClauseLibrary />
+                <ClauseLibrary 
+                  initialClauseId={selectedClauseId}
+                  onClauseSelected={() => setSelectedClauseId(null)}
+                />
               </div>
             )}
 
             {screen1View === 'contracts' && (
-              <ContractBrowser contracts={contracts} />
+              <ContractBrowser 
+                contracts={contracts}
+                onNavigateToClause={handleNavigateToClause}
+              />
             )}
 
             {screen1View === 'market' && (
@@ -293,19 +278,20 @@ export default function Home() {
         <div className="relative container mx-auto px-6 py-10">
           <div className="flex flex-col md:flex-row items-center justify-between gap-6">
             <div className="flex items-center gap-4">
-              <div className="bg-gradient-to-br from-blue-500 to-purple-600 p-3 rounded-xl shadow-lg">
-                <FileText className="w-6 h-6 text-white" />
-              </div>
+              <img 
+                src="/images.png" 
+                alt="Santander" 
+                className="w-8 h-8 object-contain rounded-lg"
+              />
               <div>
-                <h3 className="text-lg font-bold bg-gradient-to-r from-white to-blue-100 bg-clip-text text-transparent">
-                  Plataforma CLM
+                <h3 className="text-lg font-bold text-white">
+                  Plataforma de Accesibilidad
                 </h3>
-                <p className="text-sm text-gray-400">Contract Lifecycle Management</p>
               </div>
             </div>
             <div className="text-center md:text-right">
               <p className="text-sm text-gray-400">
-                © 2025 Plataforma CLM. Diseñado para el futuro de la gestión contractual.
+                © 2025 Plataforma de Accesibilidad. Gestión contractual profesional.
               </p>
             </div>
           </div>

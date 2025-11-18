@@ -1,4 +1,4 @@
-# Plataforma CLM - Contract Lifecycle Management
+# Plataforma de Accesibilidad
 
 Aplicación web desarrollada en Next.js que implementa una plataforma completa de gestión del ciclo de vida de contratos (CLM), desde la solicitud hasta el archivado y renovación.
 

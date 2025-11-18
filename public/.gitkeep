@@ -1,0 +1,13 @@
+# Logo de Santander
+
+Coloca aquí el logo de Santander con el nombre: **santander-logo.svg**
+
+Ruta completa: `/Users/jovisaib/code/work/allometrik/clm-platform/public/santander-logo.svg`
+
+El logo se mostrará automáticamente en:
+- Header del navbar (esquina superior izquierda)
+- Footer de la página
+
+Formato recomendado: SVG
+Tamaño: 24x24px (se ajustará automáticamente)
+
