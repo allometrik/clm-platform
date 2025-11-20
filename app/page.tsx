@@ -67,18 +67,6 @@ export default function Home() {
             </div>
             <div className="flex items-center gap-4">
               <nav className="flex flex-wrap gap-2">
-                {/* Herramienta de Accesibilidad - Enlace externo */}
-                <a
-                  href="https://compiagent.streamlit.app/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group relative px-5 py-2.5 rounded-xl text-sm font-semibold transition-all duration-300 text-gray-600 hover:text-gray-900 hover:bg-gray-200/50 border border-gray-300"
-                >
-                  <div className="flex items-center gap-2">
-                    <ExternalLink className="w-4 h-4" />
-                    <span>Herramienta de Accesibilidad</span>
-                  </div>
-                </a>
                 {/* Screen 1: Gestor de Contratos */}
                 <button
                   onClick={() => {
