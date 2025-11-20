@@ -47,17 +47,17 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-gray-50/50">
-      {/* Santander Header */}
+      {/* Main Header */}
       <header className="sticky top-0 z-40 bg-gradient-to-r from-gray-200 via-gray-100 to-gray-200 border-b border-gray-300 shadow-lg">
         <div className="container mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4 group">
               <div className="relative">
-                <img 
-                  src="/images.png" 
-                  alt="Santander" 
-                  className="w-10 h-10 object-contain rounded-lg group-hover:scale-110 transition-transform duration-300"
-                />
+                <div className="w-10 h-10 bg-gradient-to-br from-green-500 to-green-600 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform duration-300 shadow-lg">
+                  <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                  </svg>
+                </div>
               </div>
               <div>
                 <h1 className="text-2xl font-bold text-gray-800">
@@ -87,7 +87,7 @@ export default function Home() {
                   }}
                   className={`group relative px-5 py-2.5 rounded-xl text-sm font-semibold transition-all duration-300 ${
                     activeScreen === 'screen1'
-                      ? 'bg-gradient-to-r from-[#EC0000] to-[#C50000] text-white shadow-lg shadow-[#EC0000]/30'
+                      ? 'bg-gradient-to-r from-[#10b981] to-[#059669] text-white shadow-lg shadow-[#10b981]/30'
                       : 'text-gray-600 hover:text-gray-900 hover:bg-gray-200/50 border border-gray-300'
                   }`}
                 >
@@ -96,7 +96,47 @@ export default function Home() {
                     <span>Gestor de Contratos</span>
                   </div>
                   {activeScreen === 'screen1' && (
-                    <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-[#EC0000] to-transparent"></div>
+                    <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-[#10b981] to-transparent"></div>
+                  )}
+                </button>
+                {/* Screen 2: Solicitudes */}
+                <button
+                  onClick={() => {
+                    setActiveScreen('screen2');
+                    setScreen2View('dashboard');
+                  }}
+                  className={`group relative px-5 py-2.5 rounded-xl text-sm font-semibold transition-all duration-300 ${
+                    activeScreen === 'screen2'
+                      ? 'bg-gradient-to-r from-[#10b981] to-[#059669] text-white shadow-lg shadow-[#10b981]/30'
+                      : 'text-gray-600 hover:text-gray-900 hover:bg-gray-200/50 border border-gray-300'
+                  }`}
+                >
+                  <div className="flex items-center gap-2">
+                    <Ticket className="w-4 h-4" />
+                    <span>Solicitudes</span>
+                  </div>
+                  {activeScreen === 'screen2' && (
+                    <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-[#10b981] to-transparent"></div>
+                  )}
+                </button>
+                {/* Screen 3: Gestor CLM */}
+                <button
+                  onClick={() => {
+                    setActiveScreen('screen3');
+                    setScreen3View('lifecycle');
+                  }}
+                  className={`group relative px-5 py-2.5 rounded-xl text-sm font-semibold transition-all duration-300 ${
+                    activeScreen === 'screen3'
+                      ? 'bg-gradient-to-r from-[#10b981] to-[#059669] text-white shadow-lg shadow-[#10b981]/30'
+                      : 'text-gray-600 hover:text-gray-900 hover:bg-gray-200/50 border border-gray-300'
+                  }`}
+                >
+                  <div className="flex items-center gap-2">
+                    <Activity className="w-4 h-4" />
+                    <span>Gestor CLM</span>
+                  </div>
+                  {activeScreen === 'screen3' && (
+                    <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-[#10b981] to-transparent"></div>
                   )}
                 </button>
               </nav>
@@ -121,14 +161,14 @@ export default function Home() {
         {/* SCREEN 1: Repositorio (Contratos, Cláusulas, Market) */}
         {activeScreen === 'screen1' && (
           <>
-            {/* Santander Submenu for Screen 1 */}
+            {/* Submenu for Screen 1 */}
             <div className="mb-8 backdrop-blur-sm bg-white/70 rounded-2xl shadow-lg border border-gray-200/50 p-4">
               <div className="flex flex-wrap gap-3">
                 <button
                   onClick={() => setScreen1View('clauses')}
                   className={`group relative px-5 py-3 rounded-xl text-sm font-semibold transition-all duration-300 ${
                     screen1View === 'clauses'
-                      ? 'bg-gradient-to-r from-[#EC0000] to-[#C50000] text-white shadow-lg shadow-[#EC0000]/30'
+                      ? 'bg-gradient-to-r from-[#10b981] to-[#059669] text-white shadow-lg shadow-[#10b981]/30'
                       : 'bg-gray-50 text-gray-700 hover:bg-white hover:shadow-md'
                   }`}
                 >
@@ -141,7 +181,7 @@ export default function Home() {
                   onClick={() => setScreen1View('contracts')}
                   className={`group relative px-5 py-3 rounded-xl text-sm font-semibold transition-all duration-300 ${
                     screen1View === 'contracts'
-                      ? 'bg-gradient-to-r from-[#EC0000] to-[#C50000] text-white shadow-lg shadow-[#EC0000]/30'
+                      ? 'bg-gradient-to-r from-[#10b981] to-[#059669] text-white shadow-lg shadow-[#10b981]/30'
                       : 'bg-gray-50 text-gray-700 hover:bg-white hover:shadow-md'
                   }`}
                 >
@@ -154,7 +194,7 @@ export default function Home() {
                   onClick={() => setScreen1View('market')}
                   className={`group relative px-5 py-3 rounded-xl text-sm font-semibold transition-all duration-300 ${
                     screen1View === 'market'
-                      ? 'bg-gradient-to-r from-[#EC0000] to-[#C50000] text-white shadow-lg shadow-[#EC0000]/30'
+                      ? 'bg-gradient-to-r from-[#10b981] to-[#059669] text-white shadow-lg shadow-[#10b981]/30'
                       : 'bg-gray-50 text-gray-700 hover:bg-white hover:shadow-md'
                   }`}
                 >
@@ -291,11 +331,11 @@ export default function Home() {
         <div className="relative container mx-auto px-6 py-10">
           <div className="flex flex-col md:flex-row items-center justify-between gap-6">
             <div className="flex items-center gap-4">
-              <img 
-                src="/images.png" 
-                alt="Santander" 
-                className="w-8 h-8 object-contain rounded-lg"
-              />
+              <div className="w-8 h-8 bg-gradient-to-br from-green-500 to-green-600 rounded-lg flex items-center justify-center shadow-lg">
+                <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+              </div>
               <div>
                 <h3 className="text-lg font-bold text-white">
                   Plataforma de Accesibilidad

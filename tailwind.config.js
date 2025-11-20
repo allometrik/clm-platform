@@ -8,22 +8,22 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        santander: {
-          red: '#EC0000',
-          'red-dark': '#C50000',
-          'red-light': '#FF2020',
+        brand: {
+          green: '#10b981',
+          'green-dark': '#059669',
+          'green-light': '#34d399',
           gray: '#222222',
           'gray-medium': '#666666',
         },
         primary: {
           dark: '#222222',
-          DEFAULT: '#EC0000',
-          light: '#FF2020',
+          DEFAULT: '#10b981',
+          light: '#34d399',
         },
         accent: {
-          DEFAULT: '#EC0000',
-          light: '#FF4444',
-          dark: '#C50000',
+          DEFAULT: '#10b981',
+          light: '#34d399',
+          dark: '#059669',
         },
       },
     },

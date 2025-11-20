@@ -935,13 +935,13 @@ export default function ClauseLibrary({ initialClauseId, onClauseSelected }: Cla
                   onClick={() => setSaveAsNewVersion(true)}
                   className={`w-full p-4 rounded-xl border-2 transition-all text-left ${
                     saveAsNewVersion
-                      ? 'border-[#EC0000] bg-red-50'
+                      ? 'border-[#10b981] bg-green-50'
                       : 'border-gray-200 hover:border-gray-300'
                   }`}
                 >
                   <div className="flex items-start gap-3">
                     <div className={`w-5 h-5 rounded-full border-2 mt-0.5 flex items-center justify-center ${
-                      saveAsNewVersion ? 'border-[#EC0000] bg-[#EC0000]' : 'border-gray-300'
+                      saveAsNewVersion ? 'border-[#10b981] bg-[#10b981]' : 'border-gray-300'
                     }`}>
                       {saveAsNewVersion && <div className="w-2 h-2 bg-white rounded-full"></div>}
                     </div>
@@ -960,13 +960,13 @@ export default function ClauseLibrary({ initialClauseId, onClauseSelected }: Cla
                   onClick={() => setSaveAsNewVersion(false)}
                   className={`w-full p-4 rounded-xl border-2 transition-all text-left ${
                     !saveAsNewVersion
-                      ? 'border-[#EC0000] bg-red-50'
+                      ? 'border-[#10b981] bg-green-50'
                       : 'border-gray-200 hover:border-gray-300'
                   }`}
                 >
                   <div className="flex items-start gap-3">
                     <div className={`w-5 h-5 rounded-full border-2 mt-0.5 flex items-center justify-center ${
-                      !saveAsNewVersion ? 'border-[#EC0000] bg-[#EC0000]' : 'border-gray-300'
+                      !saveAsNewVersion ? 'border-[#10b981] bg-[#10b981]' : 'border-gray-300'
                     }`}>
                       {!saveAsNewVersion && <div className="w-2 h-2 bg-white rounded-full"></div>}
                     </div>
@@ -1238,11 +1238,11 @@ export default function ClauseLibrary({ initialClauseId, onClauseSelected }: Cla
                     alert('Exportando cláusulas a PDF...');
                     setShowExportModal(false);
                   }}
-                  className="w-full p-4 rounded-xl border-2 border-gray-200 hover:border-red-300 hover:bg-red-50 transition-all text-left group"
+                  className="w-full p-4 rounded-xl border-2 border-gray-200 hover:border-green-300 hover:bg-green-50 transition-all text-left group"
                 >
                   <div className="flex items-center gap-3">
-                    <div className="bg-red-100 p-3 rounded-lg group-hover:bg-red-200 transition-colors">
-                      <FileDown className="w-5 h-5 text-red-600" />
+                    <div className="bg-green-100 p-3 rounded-lg group-hover:bg-green-200 transition-colors">
+                      <FileDown className="w-5 h-5 text-green-600" />
                     </div>
                     <div className="flex-1">
                       <h4 className="font-semibold text-gray-900">
@@ -1414,7 +1414,7 @@ export default function ClauseLibrary({ initialClauseId, onClauseSelected }: Cla
                     <Trash2 className="w-5 h-5" />
                     Borrar Cláusula
                   </h3>
-                  <p className="text-red-100 text-sm mt-1">
+                  <p className="text-orange-100 text-sm mt-1">
                     Esta acción requiere aprobación
                   </p>
                 </div>

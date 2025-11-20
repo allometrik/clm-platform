@@ -4,15 +4,15 @@
 
 @layer base {
   :root {
-    /* Banco Santander Color Palette */
-    --santander-red: #EC0000;
-    --santander-red-dark: #C50000;
-    --santander-red-light: #FF2020;
+    /* Primary Color Palette */
+    --primary-green: #10b981;
+    --primary-green-dark: #059669;
+    --primary-green-light: #34d399;
     --primary-dark: #222222;
-    --primary: #EC0000;
-    --primary-light: #FF2020;
-    --accent: #EC0000;
-    --accent-light: #FF4444;
+    --primary: #10b981;
+    --primary-light: #34d399;
+    --accent: #10b981;
+    --accent-light: #34d399;
     --success: #10b981;
     --warning: #f59e0b;
     --error: #ef4444;
@@ -44,17 +44,17 @@
 }
 
 @layer components {
-  /* Santander Buttons */
+  /* Primary Buttons */
   .btn-primary {
-    @apply relative overflow-hidden bg-gradient-to-r from-[#EC0000] to-[#C50000] text-white px-6 py-2.5 rounded-xl 
-    font-medium shadow-lg shadow-red-500/30 hover:shadow-xl hover:shadow-red-500/40
+    @apply relative overflow-hidden bg-gradient-to-r from-[#10b981] to-[#059669] text-white px-6 py-2.5 rounded-xl 
+    font-medium shadow-lg shadow-green-500/30 hover:shadow-xl hover:shadow-green-500/40
     hover:scale-[1.02] active:scale-[0.98] 
     transition-all duration-300 ease-out;
   }
   
   .btn-primary::before {
     content: '';
-    @apply absolute inset-0 bg-gradient-to-r from-red-400 to-red-300 opacity-0 
+    @apply absolute inset-0 bg-gradient-to-r from-green-400 to-green-300 opacity-0 
     transition-opacity duration-300;
   }
   
@@ -63,8 +63,8 @@
   }
   
   .btn-accent {
-    @apply relative overflow-hidden bg-gradient-to-r from-[#EC0000] to-[#C50000] text-white px-6 py-2.5 rounded-xl 
-    font-medium shadow-lg shadow-red-500/30 hover:shadow-xl hover:shadow-red-500/40
+    @apply relative overflow-hidden bg-gradient-to-r from-[#10b981] to-[#059669] text-white px-6 py-2.5 rounded-xl 
+    font-medium shadow-lg shadow-green-500/30 hover:shadow-xl hover:shadow-green-500/40
     hover:scale-[1.02] active:scale-[0.98] 
     transition-all duration-300 ease-out;
   }
@@ -95,7 +95,7 @@
   /* Modern Input Fields */
   .input-field {
     @apply w-full px-4 py-3 border border-gray-200 rounded-xl
-    focus:outline-none focus:ring-2 focus:ring-[#EC0000]/20 focus:border-[#EC0000]
+    focus:outline-none focus:ring-2 focus:ring-[#10b981]/20 focus:border-[#10b981]
     transition-all duration-300 bg-white/80 backdrop-blur-sm
     placeholder:text-gray-400;
   }
@@ -112,7 +112,7 @@
   
   /* Gradient Text */
   .gradient-text {
-    @apply bg-gradient-to-r from-[#EC0000] to-[#C50000] bg-clip-text text-transparent;
+    @apply bg-gradient-to-r from-[#10b981] to-[#059669] bg-clip-text text-transparent;
   }
   
   /* Stat Cards */
@@ -127,7 +127,7 @@
   }
   
   .shadow-glow {
-    box-shadow: 0 0 30px -5px rgba(236, 0, 0, 0.3);
+    box-shadow: 0 0 30px -5px rgba(16, 185, 129, 0.3);
   }
   
   /* Animated Gradient Background */
