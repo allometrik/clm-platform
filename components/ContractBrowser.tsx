@@ -28,7 +28,11 @@ import {
   Plus,
   CheckSquare,
   Square,
-  Type
+  Type,
+  Copy,
+  Edit3,
+  Save,
+  Sparkles
 } from 'lucide-react';
 
 interface ContractBrowserProps {
@@ -58,6 +62,12 @@ export default function ContractBrowser({ contracts, onContractClick, onNavigate
   const [selectedClauses, setSelectedClauses] = useState<Set<string>>(new Set());
   const [templateName, setTemplateName] = useState('');
   const [customText, setCustomText] = useState('');
+  const [isEditingTemplate, setIsEditingTemplate] = useState(false);
+  const [editedTemplateTitle, setEditedTemplateTitle] = useState('');
+  const [showTemplateHistory, setShowTemplateHistory] = useState(false);
+  const [showSaveTemplateModal, setShowSaveTemplateModal] = useState(false);
+  const [saveAsNewTemplateVersion, setSaveAsNewTemplateVersion] = useState(true);
+  const [templateVersionDescription, setTemplateVersionDescription] = useState('');
 
   // Filtrar contratos por búsqueda
   const filteredContracts = contracts.filter(contract => {
@@ -98,6 +108,24 @@ export default function ContractBrowser({ contracts, onContractClick, onNavigate
 
   const closeModal = () => {
     setShowClausesModal(false);
+    setIsEditingTemplate(false);
+    setEditedTemplateTitle('');
+    setShowTemplateHistory(false);
+  };
+
+  const handleSaveTemplate = () => {
+    if (!editedTemplateTitle.trim()) {
+      alert('El nombre de la plantilla no puede estar vacío');
+      return;
+    }
+    setShowSaveTemplateModal(true);
+  };
+
+  const confirmSaveTemplate = () => {
+    alert(`Plantilla "${editedTemplateTitle}" guardada exitosamente como versión ${saveAsNewTemplateVersion ? 'nueva' : 'actualizada'}!`);
+    setIsEditingTemplate(false);
+    setShowSaveTemplateModal(false);
+    setTemplateVersionDescription('');
   };
 
   // Obtener cláusulas del contrato (basado en la plantilla)
@@ -365,39 +393,105 @@ export default function ContractBrowser({ contracts, onContractClick, onNavigate
           >
             {/* Header del Modal */}
             <div className="sticky top-0 bg-gradient-to-r from-blue-500 to-purple-600 p-6 text-white z-10">
-              <div className="flex items-start justify-between">
+              <div className="flex items-start justify-between mb-4">
                 <div className="flex-1">
                   <div className="flex items-center gap-3 mb-2">
                     <div className="bg-white/20 backdrop-blur-sm p-2 rounded-xl">
                       <FileText className="w-6 h-6" />
                     </div>
                     <div>
-                      <h3 className="text-2xl font-bold">
-                        {selectedContract.title}
-                      </h3>
-                      <p className="text-blue-100 text-sm mt-1">Detalles del Contrato y Cláusulas</p>
+                      {isEditingTemplate ? (
+                        <input
+                          type="text"
+                          value={editedTemplateTitle}
+                          onChange={(e) => setEditedTemplateTitle(e.target.value)}
+                          className="text-2xl font-bold bg-white/20 px-3 py-1 rounded-lg focus:outline-none focus:ring-2 focus:ring-white/50 text-white placeholder:text-white/70"
+                          placeholder="Nombre de la plantilla"
+                        />
+                      ) : (
+                        <h3 className="text-2xl font-bold">
+                          {selectedContract.title}
+                        </h3>
+                      )}
+                      <p className="text-blue-100 text-sm mt-1">
+                        {isEditingTemplate ? 'Editando plantilla' : 'Detalles del Contrato y Cláusulas'}
+                      </p>
                     </div>
                   </div>
                 </div>
                 <div className="flex items-center gap-2">
-                  <button
-                    onClick={() => setShowPlainView(!showPlainView)}
-                    className={`flex items-center gap-2 px-4 py-2 rounded-xl transition-all duration-200 font-semibold text-sm ${
-                      showPlainView
-                        ? 'bg-white text-blue-600'
-                        : 'bg-white/20 hover:bg-white/30'
-                    }`}
-                  >
-                    <Eye className="w-4 h-4" />
-                    {showPlainView ? 'Vista Normal' : 'Vista Previa'}
-                  </button>
-                  <button
-                    onClick={() => setShowExportModal(true)}
-                    className="flex items-center gap-2 px-4 py-2 bg-white/20 hover:bg-white/30 rounded-xl transition-all duration-200 font-semibold text-sm"
-                  >
-                    <Download className="w-4 h-4" />
-                    Exportar
-                  </button>
+                  {!isEditingTemplate ? (
+                    <>
+                      <button
+                        onClick={() => {
+                          alert(`Plantilla "${selectedContract.title}" clonada exitosamente como "${selectedContract.title} (Copia)"`);
+                        }}
+                        className="flex items-center gap-2 px-4 py-2 bg-white/20 hover:bg-white/30 rounded-xl transition-all duration-200 font-semibold text-sm"
+                      >
+                        <Copy className="w-4 h-4" />
+                        Clonar
+                      </button>
+                      <button
+                        onClick={() => {
+                          setIsEditingTemplate(true);
+                          setEditedTemplateTitle(selectedContract.title);
+                        }}
+                        className="flex items-center gap-2 px-4 py-2 bg-white/20 hover:bg-white/30 rounded-xl transition-all duration-200 font-semibold text-sm"
+                      >
+                        <Edit3 className="w-4 h-4" />
+                        Editar
+                      </button>
+                      <button
+                        onClick={() => setShowTemplateHistory(!showTemplateHistory)}
+                        className={`flex items-center gap-2 px-4 py-2 rounded-xl transition-all duration-200 font-semibold text-sm ${
+                          showTemplateHistory
+                            ? 'bg-white text-blue-600'
+                            : 'bg-white/20 hover:bg-white/30'
+                        }`}
+                      >
+                        <History className="w-4 h-4" />
+                        Historial
+                      </button>
+                      <button
+                        onClick={() => setShowPlainView(!showPlainView)}
+                        className={`flex items-center gap-2 px-4 py-2 rounded-xl transition-all duration-200 font-semibold text-sm ${
+                          showPlainView
+                            ? 'bg-white text-blue-600'
+                            : 'bg-white/20 hover:bg-white/30'
+                        }`}
+                      >
+                        <Eye className="w-4 h-4" />
+                        {showPlainView ? 'Vista Normal' : 'Vista Previa'}
+                      </button>
+                      <button
+                        onClick={() => setShowExportModal(true)}
+                        className="flex items-center gap-2 px-4 py-2 bg-white/20 hover:bg-white/30 rounded-xl transition-all duration-200 font-semibold text-sm"
+                      >
+                        <Download className="w-4 h-4" />
+                        Exportar
+                      </button>
+                    </>
+                  ) : (
+                    <>
+                      <button
+                        onClick={handleSaveTemplate}
+                        className="flex items-center gap-2 px-4 py-2 bg-white text-blue-600 hover:bg-white/90 rounded-xl transition-all duration-200 font-semibold text-sm"
+                      >
+                        <Save className="w-4 h-4" />
+                        Guardar
+                      </button>
+                      <button
+                        onClick={() => {
+                          setIsEditingTemplate(false);
+                          setEditedTemplateTitle('');
+                        }}
+                        className="flex items-center gap-2 px-4 py-2 bg-white/20 hover:bg-white/30 rounded-xl transition-all duration-200 font-semibold text-sm"
+                      >
+                        <X className="w-4 h-4" />
+                        Cancelar
+                      </button>
+                    </>
+                  )}
                   <button
                     onClick={closeModal}
                     className="bg-white/20 hover:bg-white/30 p-2 rounded-xl transition-all duration-200 hover:rotate-90"
@@ -406,12 +500,152 @@ export default function ContractBrowser({ contracts, onContractClick, onNavigate
                   </button>
                 </div>
               </div>
+
+              {/* Información de versión */}
+              {!isEditingTemplate && (
+                <div className="flex items-center gap-4 text-sm text-blue-100">
+                  <div className="flex items-center gap-2">
+                    <Sparkles className="w-4 h-4" />
+                    <span>Versión 3.2</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Calendar className="w-4 h-4" />
+                    <span>Última modificación: {new Date(selectedContract.lastModified || '').toLocaleDateString('es-ES')}</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Users className="w-4 h-4" />
+                    <span>Por: María García</span>
+                  </div>
+                </div>
+              )}
             </div>
 
             {/* Contenido del Modal */}
-            <div className="overflow-y-auto max-h-[calc(90vh-88px)]">
+            <div className="overflow-y-auto max-h-[calc(90vh-88px)] flex">
+              {/* Panel de Historial de Versiones */}
+              {showTemplateHistory && (
+                <div className="w-80 bg-gradient-to-b from-purple-50 to-pink-50 border-r border-purple-200 p-6 overflow-y-auto">
+                  <h4 className="font-bold text-gray-900 mb-4 flex items-center gap-2">
+                    <History className="w-5 h-5 text-purple-600" />
+                    Historial de Versiones
+                  </h4>
+                  
+                  <div className="space-y-3">
+                    {/* Versión 3.2 - Actual */}
+                    <div className="bg-white rounded-xl p-4 border-2 border-purple-300 shadow-md">
+                      <div className="flex items-start justify-between mb-2">
+                        <div>
+                          <span className="font-bold text-purple-900">Versión 3.2</span>
+                          <span className="ml-2 text-xs bg-purple-600 text-white px-2 py-0.5 rounded-full">Actual</span>
+                        </div>
+                        <span className="text-xs text-gray-500">Hace 2 días</span>
+                      </div>
+                      <p className="text-sm text-gray-700 mb-2">
+                        Actualización de cláusulas de confidencialidad según nueva normativa GDPR
+                      </p>
+                      <div className="flex items-center gap-2 text-xs text-gray-600 mb-2">
+                        <Users className="w-3 h-3" />
+                        <span>María García</span>
+                      </div>
+                      <div className="text-xs text-gray-600">
+                        <p className="font-semibold mb-1">Cambios realizados:</p>
+                        <ul className="list-disc list-inside space-y-0.5 text-gray-600">
+                          <li>2 cláusulas modificadas</li>
+                          <li>1 cláusula añadida</li>
+                          <li>Texto personalizado actualizado</li>
+                        </ul>
+                      </div>
+                    </div>
+
+                    {/* Versión 3.1 */}
+                    <div className="bg-white rounded-xl p-4 border border-gray-200 hover:border-purple-300 transition-all cursor-pointer">
+                      <div className="flex items-start justify-between mb-2">
+                        <span className="font-bold text-gray-900">Versión 3.1</span>
+                        <span className="text-xs text-gray-500">Hace 1 semana</span>
+                      </div>
+                      <p className="text-sm text-gray-700 mb-2">
+                        Correcciones menores en redacción de cláusulas de pago
+                      </p>
+                      <div className="flex items-center gap-2 text-xs text-gray-600">
+                        <Users className="w-3 h-3" />
+                        <span>Juan Pérez</span>
+                      </div>
+                      <button 
+                        onClick={() => alert('Mostrando versión 3.1...')}
+                        className="mt-3 w-full text-xs btn-secondary py-1.5"
+                      >
+                        Ver esta versión
+                      </button>
+                    </div>
+
+                    {/* Versión 3.0 */}
+                    <div className="bg-white rounded-xl p-4 border border-gray-200 hover:border-purple-300 transition-all cursor-pointer">
+                      <div className="flex items-start justify-between mb-2">
+                        <span className="font-bold text-gray-900">Versión 3.0</span>
+                        <span className="text-xs text-gray-500">Hace 2 semanas</span>
+                      </div>
+                      <p className="text-sm text-gray-700 mb-2">
+                        Reestructuración completa de la plantilla con nuevas cláusulas
+                      </p>
+                      <div className="flex items-center gap-2 text-xs text-gray-600">
+                        <Users className="w-3 h-3" />
+                        <span>Ana Martínez</span>
+                      </div>
+                      <button 
+                        onClick={() => alert('Mostrando versión 3.0...')}
+                        className="mt-3 w-full text-xs btn-secondary py-1.5"
+                      >
+                        Ver esta versión
+                      </button>
+                    </div>
+
+                    {/* Versión 2.5 */}
+                    <div className="bg-white rounded-xl p-4 border border-gray-200 hover:border-purple-300 transition-all cursor-pointer">
+                      <div className="flex items-start justify-between mb-2">
+                        <span className="font-bold text-gray-900">Versión 2.5</span>
+                        <span className="text-xs text-gray-500">Hace 1 mes</span>
+                      </div>
+                      <p className="text-sm text-gray-700 mb-2">
+                        Añadidas cláusulas de servicios adicionales
+                      </p>
+                      <div className="flex items-center gap-2 text-xs text-gray-600">
+                        <Users className="w-3 h-3" />
+                        <span>Carlos López</span>
+                      </div>
+                      <button 
+                        onClick={() => alert('Mostrando versión 2.5...')}
+                        className="mt-3 w-full text-xs btn-secondary py-1.5"
+                      >
+                        Ver esta versión
+                      </button>
+                    </div>
+
+                    {/* Versión 2.0 */}
+                    <div className="bg-white rounded-xl p-4 border border-gray-200 hover:border-purple-300 transition-all cursor-pointer">
+                      <div className="flex items-start justify-between mb-2">
+                        <span className="font-bold text-gray-900">Versión 2.0</span>
+                        <span className="text-xs text-gray-500">Hace 2 meses</span>
+                      </div>
+                      <p className="text-sm text-gray-700 mb-2">
+                        Revisión legal completa y aprobación del departamento jurídico
+                      </p>
+                      <div className="flex items-center gap-2 text-xs text-gray-600">
+                        <Users className="w-3 h-3" />
+                        <span>María García</span>
+                      </div>
+                      <button 
+                        onClick={() => alert('Mostrando versión 2.0...')}
+                        className="mt-3 w-full text-xs btn-secondary py-1.5"
+                      >
+                        Ver esta versión
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
+
               {/* Documento del Contrato */}
-              <div className={`bg-white p-12 max-w-4xl mx-auto ${showPlainView ? 'font-mono text-sm' : ''}`}>
+              <div className={`flex-1 bg-white p-12 ${showPlainView ? 'font-mono text-sm' : ''} ${showTemplateHistory ? 'max-w-3xl' : 'max-w-4xl mx-auto'}`}>
                 {/* Encabezado del Contrato */}
                 <div className={`text-center mb-12 pb-8 ${!showPlainView && 'border-b-2 border-gray-200'}`}>
                   <h1 className="text-3xl font-bold text-gray-900 mb-4">
@@ -691,6 +925,112 @@ export default function ContractBrowser({ contracts, onContractClick, onNavigate
               <button
                 onClick={() => setShowExportModal(false)}
                 className="btn-secondary w-full"
+              >
+                Cancelar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Modal de guardar plantilla con versionado */}
+      {showSaveTemplateModal && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-[70] p-4">
+          <div className="bg-white rounded-2xl shadow-2xl max-w-xl w-full">
+            <div className="bg-gradient-to-r from-blue-600 to-purple-600 p-6 text-white rounded-t-2xl">
+              <h3 className="text-xl font-bold flex items-center gap-2">
+                <Save className="w-5 h-5" />
+                Guardar Cambios en Plantilla
+              </h3>
+              <p className="text-blue-100 text-sm mt-1">
+                Selecciona cómo deseas guardar los cambios realizados
+              </p>
+            </div>
+            
+            <div className="p-6 space-y-6">
+              {/* Opciones de guardado */}
+              <div className="space-y-3">
+                <button
+                  onClick={() => setSaveAsNewTemplateVersion(true)}
+                  className={`w-full p-4 rounded-xl border-2 transition-all text-left ${
+                    saveAsNewTemplateVersion
+                      ? 'border-blue-500 bg-blue-50'
+                      : 'border-gray-200 hover:border-gray-300'
+                  }`}
+                >
+                  <div className="flex items-start gap-3">
+                    <div className={`w-5 h-5 rounded-full border-2 mt-0.5 flex items-center justify-center ${
+                      saveAsNewTemplateVersion ? 'border-blue-500 bg-blue-500' : 'border-gray-300'
+                    }`}>
+                      {saveAsNewTemplateVersion && <div className="w-2 h-2 bg-white rounded-full"></div>}
+                    </div>
+                    <div className="flex-1">
+                      <h4 className="font-semibold text-gray-900 mb-1">
+                        Guardar como nueva versión
+                      </h4>
+                      <p className="text-sm text-gray-600">
+                        Crea una nueva versión manteniendo el historial completo. Recomendado para cambios importantes.
+                      </p>
+                    </div>
+                  </div>
+                </button>
+
+                <button
+                  onClick={() => setSaveAsNewTemplateVersion(false)}
+                  className={`w-full p-4 rounded-xl border-2 transition-all text-left ${
+                    !saveAsNewTemplateVersion
+                      ? 'border-blue-500 bg-blue-50'
+                      : 'border-gray-200 hover:border-gray-300'
+                  }`}
+                >
+                  <div className="flex items-start gap-3">
+                    <div className={`w-5 h-5 rounded-full border-2 mt-0.5 flex items-center justify-center ${
+                      !saveAsNewTemplateVersion ? 'border-blue-500 bg-blue-500' : 'border-gray-300'
+                    }`}>
+                      {!saveAsNewTemplateVersion && <div className="w-2 h-2 bg-white rounded-full"></div>}
+                    </div>
+                    <div className="flex-1">
+                      <h4 className="font-semibold text-gray-900 mb-1">
+                        Sobreescribir versión actual
+                      </h4>
+                      <p className="text-sm text-gray-600">
+                        Actualiza la versión actual sin crear una nueva. Usar solo para correcciones menores.
+                      </p>
+                    </div>
+                  </div>
+                </button>
+              </div>
+
+              {/* Descripción de cambios */}
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  Descripción de cambios {saveAsNewTemplateVersion && '*'}
+                </label>
+                <textarea
+                  value={templateVersionDescription}
+                  onChange={(e) => setTemplateVersionDescription(e.target.value)}
+                  placeholder="Describe brevemente los cambios realizados en la plantilla..."
+                  className="w-full p-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 resize-none"
+                  rows={3}
+                />
+              </div>
+            </div>
+
+            <div className="border-t border-gray-200 p-6 bg-gray-50 rounded-b-2xl flex gap-3">
+              <button
+                onClick={confirmSaveTemplate}
+                disabled={saveAsNewTemplateVersion && !templateVersionDescription.trim()}
+                className="btn-primary flex-1 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <Save className="w-4 h-4 inline mr-2" />
+                Guardar Cambios
+              </button>
+              <button
+                onClick={() => {
+                  setShowSaveTemplateModal(false);
+                  setTemplateVersionDescription('');
+                }}
+                className="btn-secondary px-6"
               >
                 Cancelar
               </button>
