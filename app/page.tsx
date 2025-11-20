@@ -10,7 +10,7 @@ import RequestDashboard from '@/components/RequestDashboard';
 import TemplateSupermarket from '@/components/TemplateSupermarket';
 import LegalPlaybookView from '@/components/LegalPlaybook';
 import ContractLifecycle from '@/components/ContractLifecycle';
-import { FileText, Plus, BookOpen, Ticket, ShoppingCart, Scale, Search, Activity, ExternalLink } from 'lucide-react';
+import { FileText, Plus, BookOpen, Ticket, ShoppingCart, Scale, Search, Activity, ExternalLink, UserCircle, Shield } from 'lucide-react';
 
 type MainScreen = 'screen1' | 'screen2' | 'screen3';
 type Screen1View = 'clauses' | 'contracts' | 'market';
@@ -65,40 +65,53 @@ export default function Home() {
                 </h1>
               </div>
             </div>
-            <nav className="flex flex-wrap gap-2">
-              {/* Herramienta de Accesibilidad - Enlace externo */}
-              <a
-                href="https://compiagent.streamlit.app/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group relative px-5 py-2.5 rounded-xl text-sm font-semibold transition-all duration-300 text-gray-600 hover:text-gray-900 hover:bg-gray-200/50 border border-gray-300"
-              >
-                <div className="flex items-center gap-2">
-                  <ExternalLink className="w-4 h-4" />
-                  <span>Herramienta de Accesibilidad</span>
+            <div className="flex items-center gap-4">
+              <nav className="flex flex-wrap gap-2">
+                {/* Herramienta de Accesibilidad - Enlace externo */}
+                <a
+                  href="https://compiagent.streamlit.app/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group relative px-5 py-2.5 rounded-xl text-sm font-semibold transition-all duration-300 text-gray-600 hover:text-gray-900 hover:bg-gray-200/50 border border-gray-300"
+                >
+                  <div className="flex items-center gap-2">
+                    <ExternalLink className="w-4 h-4" />
+                    <span>Herramienta de Accesibilidad</span>
+                  </div>
+                </a>
+                {/* Screen 1: Gestor de Contratos */}
+                <button
+                  onClick={() => {
+                    setActiveScreen('screen1');
+                    setScreen1View('clauses');
+                  }}
+                  className={`group relative px-5 py-2.5 rounded-xl text-sm font-semibold transition-all duration-300 ${
+                    activeScreen === 'screen1'
+                      ? 'bg-gradient-to-r from-[#EC0000] to-[#C50000] text-white shadow-lg shadow-[#EC0000]/30'
+                      : 'text-gray-600 hover:text-gray-900 hover:bg-gray-200/50 border border-gray-300'
+                  }`}
+                >
+                  <div className="flex items-center gap-2">
+                    <FileText className="w-4 h-4" />
+                    <span>Gestor de Contratos</span>
+                  </div>
+                  {activeScreen === 'screen1' && (
+                    <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-[#EC0000] to-transparent"></div>
+                  )}
+                </button>
+              </nav>
+              {/* Admin User Icon */}
+              <div className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-amber-50 to-yellow-50 border border-amber-300 rounded-xl shadow-sm hover:shadow-md transition-all duration-300">
+                <div className="relative">
+                  <UserCircle className="w-8 h-8 text-amber-700" />
+                  <Shield className="w-4 h-4 text-amber-600 absolute -bottom-0.5 -right-0.5 bg-white rounded-full p-0.5" />
                 </div>
-              </a>
-              {/* Screen 1: Gestor de Contratos */}
-              <button
-                onClick={() => {
-                  setActiveScreen('screen1');
-                  setScreen1View('clauses');
-                }}
-                className={`group relative px-5 py-2.5 rounded-xl text-sm font-semibold transition-all duration-300 ${
-                  activeScreen === 'screen1'
-                    ? 'bg-gradient-to-r from-[#EC0000] to-[#C50000] text-white shadow-lg shadow-[#EC0000]/30'
-                    : 'text-gray-600 hover:text-gray-900 hover:bg-gray-200/50 border border-gray-300'
-                }`}
-              >
-                <div className="flex items-center gap-2">
-                  <FileText className="w-4 h-4" />
-                  <span>Gestor de Contratos</span>
+                <div className="flex flex-col">
+                  <span className="text-xs font-semibold text-amber-900">Admin</span>
+                  <span className="text-xs text-amber-700">Juan Pérez</span>
                 </div>
-                {activeScreen === 'screen1' && (
-                  <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-[#EC0000] to-transparent"></div>
-                )}
-              </button>
-            </nav>
+              </div>
+            </div>
           </div>
         </div>
       </header>

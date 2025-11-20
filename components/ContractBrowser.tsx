@@ -24,7 +24,11 @@ import {
   ExternalLink,
   History,
   Eye,
-  Download
+  Download,
+  Plus,
+  CheckSquare,
+  Square,
+  Type
 } from 'lucide-react';
 
 interface ContractBrowserProps {
@@ -50,6 +54,10 @@ export default function ContractBrowser({ contracts, onContractClick, onNavigate
   const [showClausesModal, setShowClausesModal] = useState(false);
   const [showPlainView, setShowPlainView] = useState(false);
   const [showExportModal, setShowExportModal] = useState(false);
+  const [showCreateTemplate, setShowCreateTemplate] = useState(false);
+  const [selectedClauses, setSelectedClauses] = useState<Set<string>>(new Set());
+  const [templateName, setTemplateName] = useState('');
+  const [customText, setCustomText] = useState('');
 
   // Filtrar contratos por búsqueda
   const filteredContracts = contracts.filter(contract => {
@@ -102,8 +110,58 @@ export default function ContractBrowser({ contracts, onContractClick, onNavigate
     ).filter(Boolean);
   };
 
+  const toggleClauseSelection = (clauseId: string) => {
+    const newSelection = new Set(selectedClauses);
+    if (newSelection.has(clauseId)) {
+      newSelection.delete(clauseId);
+    } else {
+      newSelection.add(clauseId);
+    }
+    setSelectedClauses(newSelection);
+  };
+
+  const handleCreateTemplate = () => {
+    if (!templateName.trim()) {
+      alert('Por favor ingresa un nombre para la plantilla');
+      return;
+    }
+    
+    // Simulación de creación de plantilla
+    alert(`Plantilla "${templateName}" creada exitosamente con ${selectedClauses.size} cláusulas!`);
+    setShowCreateTemplate(false);
+    setTemplateName('');
+    setCustomText('');
+    setSelectedClauses(new Set());
+  };
+
+  // Organizar cláusulas por categoría para el modal
+  const clausesByCategory: Record<string, typeof mockClauses> = {};
+  mockClauses.forEach(clause => {
+    if (!clausesByCategory[clause.category]) {
+      clausesByCategory[clause.category] = [];
+    }
+    clausesByCategory[clause.category].push(clause);
+  });
+
   return (
     <>
+      {/* Header con botón de crear plantilla */}
+      <div className="flex items-center justify-between mb-6">
+        <div>
+          <h2 className="text-2xl font-bold text-gray-900 mb-1">Plantillas de Contratos</h2>
+          <p className="text-sm text-gray-500">
+            Gestiona tus plantillas y crea nuevas a partir de cláusulas
+          </p>
+        </div>
+        <button
+          onClick={() => setShowCreateTemplate(true)}
+          className="btn-primary flex items-center gap-2"
+        >
+          <Plus className="w-4 h-4" />
+          Crear Plantilla
+        </button>
+      </div>
+
       <div className="grid grid-cols-12 gap-6">
         {/* Panel Izquierdo - Sidebar de Categorías */}
         <div className="col-span-12 lg:col-span-3">
@@ -636,6 +694,262 @@ export default function ContractBrowser({ contracts, onContractClick, onNavigate
               >
                 Cancelar
               </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Modal de Crear Plantilla */}
+      {showCreateTemplate && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl shadow-2xl max-w-5xl w-full max-h-[90vh] overflow-hidden flex flex-col">
+            {/* Header del Modal */}
+            <div className="bg-gradient-to-r from-[#EC0000] to-[#C50000] p-6 text-white">
+              <div className="flex items-start justify-between">
+                <div>
+                  <h3 className="text-2xl font-bold mb-2 flex items-center gap-2">
+                    <Plus className="w-6 h-6" />
+                    Crear Nueva Plantilla
+                  </h3>
+                  <p className="text-red-100 text-sm">
+                    Selecciona cláusulas y añade texto personalizado para tu plantilla
+                  </p>
+                </div>
+                <button
+                  onClick={() => {
+                    setShowCreateTemplate(false);
+                    setTemplateName('');
+                    setCustomText('');
+                    setSelectedClauses(new Set());
+                  }}
+                  className="text-white/80 hover:text-white transition-colors"
+                >
+                  <X className="w-6 h-6" />
+                </button>
+              </div>
+            </div>
+
+            {/* Contenido del Modal */}
+            <div className="flex-1 overflow-y-auto p-6">
+              <div className="space-y-6">
+                {/* Información básica de la plantilla */}
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">
+                      Nombre de la Plantilla *
+                    </label>
+                    <input
+                      type="text"
+                      value={templateName}
+                      onChange={(e) => setTemplateName(e.target.value)}
+                      className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-red-500/20 focus:border-red-500"
+                      placeholder="Ej: Plantilla de Servicios Profesionales"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">
+                      Tipo de Plantilla
+                    </label>
+                    <select className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-red-500/20 focus:border-red-500">
+                      <option>Servicios</option>
+                      <option>Consultoría</option>
+                      <option>Mantenimiento</option>
+                      <option>Licencia</option>
+                      <option>NDA</option>
+                      <option>Otro</option>
+                    </select>
+                  </div>
+                </div>
+
+                {/* Sección de Cláusulas y Texto */}
+                <div className="grid grid-cols-2 gap-6">
+                  {/* Columna Izquierda - Selección de Cláusulas */}
+                  <div className="bg-gray-50 rounded-xl p-5 border border-gray-200">
+                    <div className="flex items-center justify-between mb-4">
+                      <h4 className="font-bold text-gray-900 flex items-center gap-2">
+                        <BookOpen className="w-5 h-5 text-blue-600" />
+                        Cláusulas de la Biblioteca
+                      </h4>
+                      <span className="text-sm text-gray-500 bg-white px-3 py-1 rounded-full">
+                        {selectedClauses.size} seleccionadas
+                      </span>
+                    </div>
+                    
+                    <div className="space-y-3 max-h-[400px] overflow-y-auto pr-2">
+                      {Object.entries(clausesByCategory).map(([category, clauses]) => (
+                        <div key={category} className="space-y-2">
+                          {/* Categoría */}
+                          <div className="flex items-center gap-2 pb-2 border-b border-gray-300">
+                            <button
+                              onClick={() => {
+                                const categoryClauses = clauses.map(c => c.id);
+                                const allSelected = categoryClauses.every(id => selectedClauses.has(id));
+                                const newSelection = new Set(selectedClauses);
+                                
+                                if (allSelected) {
+                                  categoryClauses.forEach(id => newSelection.delete(id));
+                                } else {
+                                  categoryClauses.forEach(id => newSelection.add(id));
+                                }
+                                setSelectedClauses(newSelection);
+                              }}
+                              className="flex-shrink-0"
+                            >
+                              {clauses.every(c => selectedClauses.has(c.id)) ? (
+                                <CheckSquare className="w-4 h-4 text-red-600" />
+                              ) : clauses.some(c => selectedClauses.has(c.id)) ? (
+                                <div className="w-4 h-4 border-2 border-red-600 rounded bg-red-100 flex items-center justify-center">
+                                  <div className="w-2 h-2 bg-red-600 rounded-sm"></div>
+                                </div>
+                              ) : (
+                                <Square className="w-4 h-4 text-gray-400" />
+                              )}
+                            </button>
+                            <Tag className="w-4 h-4 text-gray-600" />
+                            <span className="font-semibold text-sm text-gray-900">{category}</span>
+                            <span className="text-xs text-gray-500 ml-auto">
+                              {clauses.length}
+                            </span>
+                          </div>
+
+                          {/* Cláusulas de la categoría */}
+                          <div className="ml-6 space-y-1">
+                            {clauses.map(clause => (
+                              <button
+                                key={clause.id}
+                                onClick={() => toggleClauseSelection(clause.id)}
+                                className="w-full flex items-center gap-2 p-2 rounded-lg hover:bg-white transition-all group text-left"
+                              >
+                                {selectedClauses.has(clause.id) ? (
+                                  <CheckSquare className="w-4 h-4 text-red-600 flex-shrink-0" />
+                                ) : (
+                                  <Square className="w-4 h-4 text-gray-400 group-hover:text-red-400 flex-shrink-0" />
+                                )}
+                                <div className="flex-1 min-w-0">
+                                  <p className="text-sm font-medium text-gray-700 truncate">
+                                    {clause.title}
+                                  </p>
+                                  <p className="text-xs text-gray-500 truncate">
+                                    {clause.content.substring(0, 50)}...
+                                  </p>
+                                </div>
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Columna Derecha - Texto Personalizado */}
+                  <div className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-xl p-5 border border-purple-200">
+                    <h4 className="font-bold text-gray-900 mb-4 flex items-center gap-2">
+                      <Type className="w-5 h-5 text-purple-600" />
+                      Texto Personalizado (Mock)
+                    </h4>
+                    
+                    <div className="space-y-4">
+                      <div>
+                        <label className="block text-sm font-semibold text-gray-700 mb-2">
+                          Preámbulo o Introducción
+                        </label>
+                        <textarea
+                          value={customText}
+                          onChange={(e) => setCustomText(e.target.value)}
+                          className="w-full px-4 py-3 border-2 border-purple-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-purple-500/20 focus:border-purple-500 resize-none bg-white"
+                          rows={6}
+                          placeholder="Añade texto personalizado para la introducción de la plantilla..."
+                        />
+                      </div>
+
+                      <div className="bg-white rounded-lg p-4 border-2 border-purple-200">
+                        <p className="text-xs font-semibold text-purple-900 mb-2">Vista Previa Mock:</p>
+                        <div className="space-y-2 text-xs text-gray-700">
+                          {customText ? (
+                            <p className="italic">{customText}</p>
+                          ) : (
+                            <p className="text-gray-400 italic">El texto personalizado aparecerá aquí...</p>
+                          )}
+                          {selectedClauses.size > 0 && (
+                            <div className="mt-3 pt-3 border-t border-purple-200">
+                              <p className="font-semibold mb-2">Cláusulas incluidas:</p>
+                              <ul className="space-y-1">
+                                {Array.from(selectedClauses).slice(0, 3).map(clauseId => {
+                                  const clause = mockClauses.find(c => c.id === clauseId);
+                                  return clause ? (
+                                    <li key={clauseId} className="flex items-center gap-2">
+                                      <div className="w-1 h-1 rounded-full bg-purple-600"></div>
+                                      {clause.title}
+                                    </li>
+                                  ) : null;
+                                })}
+                                {selectedClauses.size > 3 && (
+                                  <li className="text-gray-500 italic ml-3">
+                                    +{selectedClauses.size - 3} cláusulas más
+                                  </li>
+                                )}
+                              </ul>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Resumen */}
+                <div className="bg-gradient-to-r from-blue-50 to-cyan-50 rounded-xl p-5 border border-blue-200">
+                  <h5 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
+                    <FileText className="w-4 h-4 text-blue-600" />
+                    Resumen de la Plantilla
+                  </h5>
+                  <div className="grid grid-cols-3 gap-4 text-sm">
+                    <div>
+                      <p className="text-gray-600 mb-1">Nombre:</p>
+                      <p className="font-semibold text-gray-900">
+                        {templateName || 'Sin nombre'}
+                      </p>
+                    </div>
+                    <div>
+                      <p className="text-gray-600 mb-1">Cláusulas:</p>
+                      <p className="font-semibold text-gray-900">
+                        {selectedClauses.size} seleccionadas
+                      </p>
+                    </div>
+                    <div>
+                      <p className="text-gray-600 mb-1">Texto personalizado:</p>
+                      <p className="font-semibold text-gray-900">
+                        {customText ? `${customText.length} caracteres` : 'Sin texto'}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Footer del Modal */}
+            <div className="border-t border-gray-200 p-6 bg-gray-50">
+              <div className="flex gap-3">
+                <button 
+                  onClick={handleCreateTemplate}
+                  disabled={!templateName.trim()}
+                  className="btn-primary flex-1 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  <Plus className="w-4 h-4" />
+                  Crear Plantilla
+                </button>
+                <button 
+                  onClick={() => {
+                    setShowCreateTemplate(false);
+                    setTemplateName('');
+                    setCustomText('');
+                    setSelectedClauses(new Set());
+                  }}
+                  className="btn-secondary px-6"
+                >
+                  Cancelar
+                </button>
+              </div>
             </div>
           </div>
         </div>

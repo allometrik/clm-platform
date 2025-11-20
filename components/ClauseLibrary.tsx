@@ -14,15 +14,16 @@ import {
   History, 
   FileText,
   Plus,
-  CheckSquare,
-  Square,
   Sparkles,
   Download,
   Search,
   AlertCircle,
   Copy,
   GitCompare,
-  FileDown
+  FileDown,
+  Trash2,
+  CheckSquare,
+  Square
 } from 'lucide-react';
 
 interface ClauseVersion {
@@ -67,6 +68,12 @@ export default function ClauseLibrary({ initialClauseId, onClauseSelected }: Cla
   const [showAiMenu, setShowAiMenu] = useState(false);
   const [isGeneratingAi, setIsGeneratingAi] = useState(false);
   const aiMenuRef = useRef<HTMLDivElement>(null);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [deletedClauses, setDeletedClauses] = useState<Set<string>>(new Set());
+  const [showCreateClauseModal, setShowCreateClauseModal] = useState(false);
+  const [newClauseTitle, setNewClauseTitle] = useState('');
+  const [newClauseCategory, setNewClauseCategory] = useState('');
+  const [newClauseContent, setNewClauseContent] = useState('');
 
   // Cerrar menú de IA al hacer clic fuera
   useEffect(() => {
@@ -87,7 +94,7 @@ export default function ClauseLibrary({ initialClauseId, onClauseSelected }: Cla
 
   // Organizar TODAS las cláusulas en estructura jerárquica (para el modal)
   const allClausesTree: Record<string, ClauseNode[]> = {};
-  mockClauses.forEach(clause => {
+  mockClauses.filter(clause => !deletedClauses.has(clause.id)).forEach(clause => {
     if (!allClausesTree[clause.category]) {
       allClausesTree[clause.category] = [];
     }
@@ -125,6 +132,7 @@ export default function ClauseLibrary({ initialClauseId, onClauseSelected }: Cla
 
   // Filtrar cláusulas por búsqueda (para el sidebar)
   const filteredClauses = mockClauses.filter(clause => {
+    if (deletedClauses.has(clause.id)) return false;
     const searchLower = searchQuery.toLowerCase();
     return (
       clause.title.toLowerCase().includes(searchLower) ||
@@ -292,16 +300,6 @@ export default function ClauseLibrary({ initialClauseId, onClauseSelected }: Cla
     setShowSaveModal(false);
   };
 
-  const toggleClauseSelection = (clauseId: string) => {
-    const newSelection = new Set(selectedClauses);
-    if (newSelection.has(clauseId)) {
-      newSelection.delete(clauseId);
-    } else {
-      newSelection.add(clauseId);
-    }
-    setSelectedClauses(newSelection);
-  };
-
   const getTemplateUsageCount = (clauseId: string) => {
     return mockTemplates.filter(template => 
       template.clauses.includes(clauseId)
@@ -342,6 +340,73 @@ export default function ClauseLibrary({ initialClauseId, onClauseSelected }: Cla
     }, 2000);
   };
 
+  const handleDeleteClause = () => {
+    if (!selectedClause) return;
+    
+    // Simular aprobación y borrado
+    setDeletedClauses(prev => {
+      const newSet = new Set(prev);
+      newSet.add(selectedClause.id);
+      return newSet;
+    });
+    
+    setShowDeleteModal(false);
+    setSelectedClause(null);
+  };
+
+  const handleCreateClause = () => {
+    if (!newClauseTitle.trim() || !newClauseCategory || !newClauseContent.trim()) {
+      alert('Por favor completa todos los campos');
+      return;
+    }
+
+    // Simular creación de nueva cláusula
+    const newClause: ClauseNode = {
+      id: `new-${Date.now()}`,
+      title: newClauseTitle,
+      category: newClauseCategory,
+      content: newClauseContent,
+      lastModified: new Date().toISOString(),
+      versions: [
+        {
+          version: 1,
+          content: newClauseContent,
+          modifiedBy: 'Usuario Actual',
+          modifiedDate: new Date().toISOString(),
+          changes: 'Versión inicial'
+        }
+      ]
+    };
+
+    // Añadir al mock de cláusulas
+    mockClauses.push({
+      id: newClause.id,
+      title: newClause.title,
+      category: newClause.category,
+      content: newClause.content,
+      lastModified: newClause.lastModified
+    });
+
+    // Limpiar formulario
+    setNewClauseTitle('');
+    setNewClauseCategory('');
+    setNewClauseContent('');
+    setShowCreateClauseModal(false);
+
+    // Seleccionar la nueva cláusula y expandir su categoría
+    setSelectedClause(newClause);
+    setExpandedCategories(prev => {
+      const newSet = new Set(prev);
+      newSet.add(newClause.category);
+      return newSet;
+    });
+
+    alert('Cláusula creada exitosamente');
+  };
+
+  // Obtener categorías únicas para el selector
+  const availableCategories = Array.from(new Set(mockClauses.map(c => c.category)));
+
   return (
     <div className="space-y-6">
       {/* Header con acciones */}
@@ -361,29 +426,14 @@ export default function ClauseLibrary({ initialClauseId, onClauseSelected }: Cla
             <FileDown className="w-4 h-4" />
             Exportar
           </button>
-          {/* Botón siempre visible */}
+          {/* Botón de crear cláusula */}
           <button
-            onClick={() => setShowCreateContract(true)}
+            onClick={() => setShowCreateClauseModal(true)}
             className="btn-primary flex items-center gap-2"
           >
             <Plus className="w-4 h-4" />
-            Crear Contrato
+            Crear Cláusula
           </button>
-          {/* Botón con contador cuando hay selección previa */}
-          {selectedClauses.size > 0 && (
-            <div className="relative">
-              <button
-                onClick={() => setShowCreateContract(true)}
-                className="btn-accent flex items-center gap-2"
-              >
-                <Sparkles className="w-4 h-4" />
-                Con {selectedClauses.size} Seleccionadas
-              </button>
-              <div className="absolute -top-2 -right-2 bg-gradient-to-br from-red-500 to-red-600 text-white text-xs font-bold w-6 h-6 rounded-full flex items-center justify-center shadow-lg animate-pulse">
-                {selectedClauses.size}
-              </div>
-            </div>
-          )}
         </div>
       </div>
 
@@ -472,33 +522,19 @@ export default function ClauseLibrary({ initialClauseId, onClauseSelected }: Cla
                   {expandedCategories.has(category) && (
                     <div className="ml-6 mt-1 space-y-1">
                       {clauses.map(clause => (
-                        <div
+                        <button
                           key={clause.id}
-                          className="flex items-center gap-2 group"
+                          onClick={() => selectClause(clause)}
+                          className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-all duration-200 text-left ${
+                            selectedClause?.id === clause.id
+                              ? 'bg-gray-600 text-white shadow-md'
+                              : 'hover:bg-white/60 text-gray-700'
+                          }`}
                         >
-                          <button
-                            onClick={() => toggleClauseSelection(clause.id)}
-                            className="flex-shrink-0"
-                          >
-                            {selectedClauses.has(clause.id) ? (
-                              <CheckSquare className="w-4 h-4 text-blue-600" />
-                            ) : (
-                              <Square className="w-4 h-4 text-gray-400 group-hover:text-blue-400" />
-                            )}
-                          </button>
-                          <button
-                            onClick={() => selectClause(clause)}
-                            className={`flex-1 flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-all duration-200 text-left ${
-                              selectedClause?.id === clause.id
-                                ? 'bg-gray-600 text-white shadow-md'
-                                : 'hover:bg-white/60 text-gray-700'
-                            }`}
-                          >
-                            <FileText className="w-3.5 h-3.5 flex-shrink-0" />
-                            <span className="flex-1 font-medium">{clause.title}</span>
-                            <ChevronRight className="w-3.5 h-3.5 opacity-50" />
-                          </button>
-                        </div>
+                          <FileText className="w-3.5 h-3.5 flex-shrink-0" />
+                          <span className="flex-1 font-medium">{clause.title}</span>
+                          <ChevronRight className="w-3.5 h-3.5 opacity-50" />
+                        </button>
                       ))}
                     </div>
                   )}
@@ -564,6 +600,13 @@ export default function ClauseLibrary({ initialClauseId, onClauseSelected }: Cla
                         >
                           <History className="w-4 h-4" />
                           Historial
+                        </button>
+                        <button
+                          onClick={() => setShowDeleteModal(true)}
+                          className="btn-secondary flex items-center gap-2 text-red-600 hover:bg-red-50 hover:border-red-300"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                          Borrar
                         </button>
                       </>
                     ) : (
@@ -1226,213 +1269,239 @@ export default function ClauseLibrary({ initialClauseId, onClauseSelected }: Cla
         </div>
       )}
 
-      {/* Modal crear contrato mejorado */}
-      {showCreateContract && (
+      {/* Modal de crear cláusula */}
+      {showCreateClauseModal && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden flex flex-col">
-            {/* Header del Modal */}
-            <div className="bg-gradient-to-r from-blue-600 to-purple-600 p-6 text-white">
+          <div className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full">
+            <div className="bg-gradient-to-r from-blue-600 to-purple-600 p-6 text-white rounded-t-2xl">
               <div className="flex items-start justify-between">
                 <div>
-                  <h3 className="text-2xl font-bold mb-2">
-                    Crear Nuevo Contrato
+                  <h3 className="text-xl font-bold flex items-center gap-2">
+                    <Plus className="w-5 h-5" />
+                    Crear Nueva Cláusula
                   </h3>
-                  <p className="text-blue-100 text-sm">
-                    Selecciona las cláusulas que deseas incluir en tu contrato
+                  <p className="text-blue-100 text-sm mt-1">
+                    Completa la información de la cláusula
                   </p>
                 </div>
                 <button
-                  onClick={() => setShowCreateContract(false)}
+                  onClick={() => {
+                    setShowCreateClauseModal(false);
+                    setNewClauseTitle('');
+                    setNewClauseCategory('');
+                    setNewClauseContent('');
+                  }}
                   className="text-white/80 hover:text-white transition-colors"
                 >
-                  <X className="w-6 h-6" />
+                  <X className="w-5 h-5" />
                 </button>
               </div>
             </div>
 
-            {/* Contenido del Modal */}
-            <div className="flex-1 overflow-y-auto p-6">
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                {/* Columna Izquierda - Selección de Cláusulas */}
-                <div>
-                  <div className="flex items-center justify-between mb-4">
-                    <h4 className="font-bold text-gray-900">
-                      Cláusulas Disponibles
-                    </h4>
-                    <span className="text-sm text-gray-500">
-                      {selectedClauses.size} seleccionadas
-                    </span>
-                  </div>
-                  
-                  <div className="space-y-3 max-h-96 overflow-y-auto bg-gray-50 rounded-xl p-4">
-                    {Object.entries(allClausesTree).map(([category, clauses]) => (
-                      <div key={category} className="space-y-2">
-                        {/* Categoría con checkbox "Seleccionar todas" */}
-                        <div className="flex items-center gap-2 pb-2 border-b border-gray-200">
-                          <button
-                            onClick={() => {
-                              const categoryClauses = clauses.map(c => c.id);
-                              const allSelected = categoryClauses.every(id => selectedClauses.has(id));
-                              const newSelection = new Set(selectedClauses);
-                              
-                              if (allSelected) {
-                                categoryClauses.forEach(id => newSelection.delete(id));
-                              } else {
-                                categoryClauses.forEach(id => newSelection.add(id));
-                              }
-                              setSelectedClauses(newSelection);
-                            }}
-                            className="flex-shrink-0"
-                          >
-                            {clauses.every(c => selectedClauses.has(c.id)) ? (
-                              <CheckSquare className="w-4 h-4 text-blue-600" />
-                            ) : clauses.some(c => selectedClauses.has(c.id)) ? (
-                              <div className="w-4 h-4 border-2 border-blue-600 rounded bg-blue-100 flex items-center justify-center">
-                                <div className="w-2 h-2 bg-blue-600 rounded-sm"></div>
-                              </div>
-                            ) : (
-                              <Square className="w-4 h-4 text-gray-400" />
-                            )}
-                          </button>
-                          <Tag className="w-4 h-4 text-orange-600" />
-                          <span className="font-semibold text-sm text-gray-900">{category}</span>
-                          <span className="text-xs text-gray-500 ml-auto">
-                            {clauses.length}
-                          </span>
-                        </div>
+            <div className="p-6 space-y-5">
+              {/* Título */}
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  Título de la Cláusula *
+                </label>
+                <input
+                  type="text"
+                  value={newClauseTitle}
+                  onChange={(e) => setNewClauseTitle(e.target.value)}
+                  placeholder="Ej: Protección de Datos"
+                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
+                />
+              </div>
 
-                        {/* Cláusulas de la categoría */}
-                        <div className="ml-6 space-y-1">
-                          {clauses.map(clause => (
-                            <button
-                              key={clause.id}
-                              onClick={() => toggleClauseSelection(clause.id)}
-                              className="w-full flex items-center gap-2 p-2 rounded-lg hover:bg-white transition-all group text-left"
-                            >
-                              {selectedClauses.has(clause.id) ? (
-                                <CheckSquare className="w-4 h-4 text-blue-600 flex-shrink-0" />
-                              ) : (
-                                <Square className="w-4 h-4 text-gray-400 group-hover:text-blue-400 flex-shrink-0" />
-                              )}
-                              <div className="flex-1 min-w-0">
-                                <p className="text-sm font-medium text-gray-700 truncate">
-                                  {clause.title}
-                                </p>
-                                <p className="text-xs text-gray-500 truncate">
-                                  {clause.content.substring(0, 60)}...
-                                </p>
-                              </div>
-                            </button>
-                          ))}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
+              {/* Categoría */}
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  Categoría *
+                </label>
+                <select
+                  value={newClauseCategory}
+                  onChange={(e) => setNewClauseCategory(e.target.value)}
+                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
+                >
+                  <option value="">Selecciona una categoría</option>
+                  {availableCategories.map((cat) => (
+                    <option key={cat} value={cat}>
+                      {cat}
+                    </option>
+                  ))}
+                  <option value="nueva">+ Nueva categoría</option>
+                </select>
+                {newClauseCategory === 'nueva' && (
+                  <input
+                    type="text"
+                    value={newClauseCategory !== 'nueva' ? newClauseCategory : ''}
+                    onChange={(e) => setNewClauseCategory(e.target.value)}
+                    placeholder="Nombre de la nueva categoría"
+                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 transition-all mt-2"
+                  />
+                )}
+              </div>
 
-                  {selectedClauses.size === 0 && (
-                    <div className="mt-4 p-4 bg-amber-50 border border-amber-200 rounded-xl">
-                      <div className="flex items-center gap-2 text-amber-800">
-                        <AlertCircle className="w-4 h-4" />
-                        <span className="text-sm font-medium">
-                          Selecciona al menos una cláusula para crear el contrato
-                        </span>
-                      </div>
-                    </div>
-                  )}
-                </div>
+              {/* Contenido */}
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  Contenido de la Cláusula *
+                </label>
+                <textarea
+                  value={newClauseContent}
+                  onChange={(e) => setNewClauseContent(e.target.value)}
+                  placeholder="Escribe el contenido de la cláusula..."
+                  rows={8}
+                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 transition-all resize-none"
+                />
+                <p className="text-xs text-gray-500 mt-1">
+                  {newClauseContent.length} caracteres
+                </p>
+              </div>
 
-                {/* Columna Derecha - Detalles del Contrato */}
-                <div className="space-y-6">
-                  {/* Nombre del contrato */}
+              {/* Información adicional */}
+              <div className="bg-blue-50 rounded-xl p-4 border border-blue-200">
+                <div className="flex items-start gap-3">
+                  <Sparkles className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
                   <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-2">
-                      Nombre del Contrato *
-                    </label>
-                    <input
-                      type="text"
-                      className="input-field"
-                      placeholder="Ej: Contrato de Servicios Profesionales"
-                    />
-                  </div>
-
-                  {/* Tipo de contrato */}
-                  <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-2">
-                      Tipo de Contrato
-                    </label>
-                    <select className="input-field">
-                      <option>Servicios</option>
-                      <option>Consultoría</option>
-                      <option>Mantenimiento</option>
-                      <option>Licencia</option>
-                      <option>NDA</option>
-                      <option>Otro</option>
-                    </select>
-                  </div>
-
-                  {/* Cliente */}
-                  <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-2">
-                      Cliente
-                    </label>
-                    <input
-                      type="text"
-                      className="input-field"
-                      placeholder="Nombre del cliente"
-                    />
-                  </div>
-
-                  {/* Resumen de cláusulas seleccionadas */}
-                  <div className="bg-gradient-to-br from-blue-50 to-purple-50 rounded-xl p-4">
-                    <h5 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
-                      <FileText className="w-4 h-4 text-blue-600" />
-                      Cláusulas Seleccionadas ({selectedClauses.size})
+                    <h5 className="font-semibold text-blue-900 mb-1">
+                      Consejos para crear cláusulas
                     </h5>
-                    {selectedClauses.size > 0 ? (
-                      <div className="space-y-2 max-h-40 overflow-y-auto">
-                        {Array.from(selectedClauses).map(clauseId => {
-                          const clause = mockClauses.find(c => c.id === clauseId);
-                          if (!clause) return null;
-                          return (
-                            <div key={clauseId} className="flex items-center gap-2 text-sm">
-                              <div className="w-1.5 h-1.5 rounded-full bg-blue-600"></div>
-                              <span className="text-gray-700 font-medium">{clause.title}</span>
-                              <span className="text-xs text-gray-500 ml-auto">{clause.category}</span>
-                            </div>
-                          );
-                        })}
-                      </div>
-                    ) : (
-                      <p className="text-sm text-gray-500 italic">
-                        Ninguna cláusula seleccionada
-                      </p>
-                    )}
+                    <ul className="text-sm text-blue-800 space-y-1">
+                      <li>• Sé claro y conciso en la redacción</li>
+                      <li>• Usa lenguaje legal apropiado pero comprensible</li>
+                      <li>• Define términos importantes</li>
+                      <li>• Revisa la ortografía y gramática</li>
+                    </ul>
                   </div>
                 </div>
               </div>
             </div>
 
-            {/* Footer del Modal */}
-            <div className="border-t border-gray-200 p-6 bg-gray-50">
-              <div className="flex gap-3">
-                <button 
-                  disabled={selectedClauses.size === 0}
-                  className="btn-primary flex-1 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  <Plus className="w-4 h-4" />
-                  Crear Contrato con {selectedClauses.size} Cláusulas
-                </button>
-                <button 
-                  onClick={() => setShowCreateContract(false)}
-                  className="btn-secondary px-6"
-                >
-                  Cancelar
-                </button>
-              </div>
+            <div className="border-t border-gray-200 p-6 bg-gray-50 rounded-b-2xl flex gap-3">
+              <button
+                onClick={handleCreateClause}
+                disabled={!newClauseTitle.trim() || !newClauseCategory || newClauseCategory === 'nueva' || !newClauseContent.trim()}
+                className="flex-1 btn-primary disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <Plus className="w-4 h-4 inline mr-2" />
+                Crear Cláusula
+              </button>
+              <button
+                onClick={() => {
+                  setShowCreateClauseModal(false);
+                  setNewClauseTitle('');
+                  setNewClauseCategory('');
+                  setNewClauseContent('');
+                }}
+                className="btn-secondary px-6"
+              >
+                Cancelar
+              </button>
             </div>
           </div>
         </div>
       )}
+
+      {/* Modal de confirmación de borrado */}
+      {showDeleteModal && selectedClause && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl shadow-2xl max-w-lg w-full">
+            <div className="bg-gradient-to-r from-red-600 to-orange-600 p-6 text-white rounded-t-2xl">
+              <div className="flex items-start justify-between">
+                <div>
+                  <h3 className="text-xl font-bold flex items-center gap-2">
+                    <Trash2 className="w-5 h-5" />
+                    Borrar Cláusula
+                  </h3>
+                  <p className="text-red-100 text-sm mt-1">
+                    Esta acción requiere aprobación
+                  </p>
+                </div>
+                <button
+                  onClick={() => setShowDeleteModal(false)}
+                  className="text-white/80 hover:text-white transition-colors"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+            </div>
+
+            <div className="p-6 space-y-6">
+              {/* Información de la cláusula */}
+              <div className="bg-gray-50 rounded-xl p-4 border border-gray-200">
+                <h4 className="font-semibold text-gray-900 mb-2">
+                  {selectedClause.title}
+                </h4>
+                <p className="text-sm text-gray-600">
+                  Categoría: <span className="font-medium">{selectedClause.category}</span>
+                </p>
+              </div>
+
+              {/* Advertencia */}
+              <div className="bg-amber-50 rounded-xl p-4 border border-amber-200">
+                <div className="flex items-start gap-3">
+                  <AlertCircle className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
+                  <div>
+                    <h5 className="font-semibold text-amber-900 mb-1">
+                      ¿Estás seguro?
+                    </h5>
+                    <p className="text-sm text-amber-800">
+                      Al borrar esta cláusula, se eliminará de todas las plantillas donde esté siendo utilizada.
+                      Las secciones se re-enumerarán automáticamente.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Plantillas afectadas */}
+              {getTemplateUsageCount(selectedClause.id) > 0 && (
+                <div className="bg-blue-50 rounded-xl p-4 border border-blue-200">
+                  <h5 className="font-semibold text-blue-900 mb-3 flex items-center gap-2">
+                    <FileText className="w-4 h-4" />
+                    Plantillas Afectadas ({getTemplateUsageCount(selectedClause.id)})
+                  </h5>
+                  <ul className="space-y-2">
+                    {getTemplateNames(selectedClause.id).map((name, idx) => (
+                      <li key={idx} className="text-sm text-blue-800 flex items-center gap-2">
+                        <div className="w-1.5 h-1.5 rounded-full bg-blue-600"></div>
+                        {name}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
+              {/* Proceso de aprobación */}
+              <div className="bg-purple-50 rounded-xl p-4 border border-purple-200">
+                <h5 className="font-semibold text-purple-900 mb-2">
+                  Proceso de Aprobación
+                </h5>
+                <p className="text-sm text-purple-800">
+                  Esta solicitud será enviada al equipo legal para su revisión y aprobación antes de proceder con la eliminación.
+                </p>
+              </div>
+            </div>
+
+            <div className="border-t border-gray-200 p-6 bg-gray-50 rounded-b-2xl flex gap-3">
+              <button
+                onClick={handleDeleteClause}
+                className="flex-1 px-4 py-3 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-xl transition-all duration-200 hover:shadow-lg flex items-center justify-center gap-2"
+              >
+                <Trash2 className="w-4 h-4" />
+                Confirmar Borrado
+              </button>
+              <button
+                onClick={() => setShowDeleteModal(false)}
+                className="btn-secondary px-6"
+              >
+                Cancelar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
     </div>
   );
 }
