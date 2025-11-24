@@ -30,7 +30,7 @@ const lifecyclePhases = [
   { key: 'firma', label: 'Firma', icon: FileText, color: 'bg-purple-100 text-purple-600' },
   { key: 'archivado', label: 'Archivado', icon: Archive, color: 'bg-green-100 text-green-600' },
   { key: 'cumplimiento', label: 'Cumplimiento', icon: Activity, color: 'bg-teal-100 text-teal-600' },
-  { key: 'renovacion', label: 'Renovación', icon: RotateCw, color: 'bg-orange-100 text-orange-600' },
+  { key: 'renovacion', label: 'Renovación', icon: RotateCw, color: 'bg-[#FFE5E2] text-[#E85D4E]' },
   { key: 'vencido', label: 'Vencido', icon: AlertCircle, color: 'bg-red-100 text-red-600' },
 ];
 
@@ -132,7 +132,7 @@ export default function ContractLifecycle({ contracts, onContractClick }: Contra
         </div>
 
         {/* Próximos a Vencer */}
-        <div className="group relative bg-gradient-to-br from-orange-500 to-orange-600 rounded-2xl p-6 text-white shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300 overflow-hidden">
+        <div className="group relative bg-gradient-to-br from-[#E85D4E] to-[#D14839] rounded-2xl p-6 text-white shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300 overflow-hidden ring-2 ring-[#E85D4E] ring-offset-2">
           <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -mr-16 -mt-16"></div>
           <div className="relative">
             <div className="flex items-center justify-between mb-3">

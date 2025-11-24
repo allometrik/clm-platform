@@ -41,7 +41,7 @@ export default function ApprovalFlow({ approvalFlow }: ApprovalFlowProps) {
           return (
             <div key={step.stepNumber}>
               <div className={`flex items-center gap-4 p-4 rounded-lg ${
-                isPending ? 'bg-blue-50 border-2 border-blue-500' :
+                isPending ? 'bg-[#FFE5E2] border-2 border-[#E85D4E]' :
                 isCompleted ? 'bg-green-50' :
                 'bg-gray-50'
               }`}>

@@ -49,8 +49,8 @@ const statusConfig: Record<RequestStatus, { label: string; icon: any; color: str
 const priorityConfig = {
   baja: { label: 'Baja', color: 'bg-gray-100', textColor: 'text-gray-700' },
   media: { label: 'Media', color: 'bg-blue-50', textColor: 'text-blue-700' },
-  alta: { label: 'Alta', color: 'bg-orange-50', textColor: 'text-orange-700' },
-  urgente: { label: 'Urgente', color: 'bg-red-50', textColor: 'text-red-700' },
+  alta: { label: 'Alta', color: 'bg-orange-50', textColor: 'text-[#E85D4E]' },
+  urgente: { label: 'Urgente', color: 'bg-[#FFE5E2]', textColor: 'text-[#E85D4E]' },
 };
 
 export default function RequestPortal({ requests }: RequestPortalProps) {

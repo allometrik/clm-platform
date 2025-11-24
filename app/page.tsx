@@ -53,7 +53,7 @@ export default function Home() {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4 group">
               <div className="relative">
-                <div className="w-10 h-10 bg-gradient-to-br from-[#0F4C81] to-[#0A3A5F] rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform duration-300 shadow-lg">
+                <div className="w-10 h-10 bg-gradient-to-br from-[#0F4C81] to-[#0A3A5F] rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform duration-300 shadow-lg ring-2 ring-[#E85D4E] ring-offset-2">
                   <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                   </svg>
@@ -129,14 +129,14 @@ export default function Home() {
                 </button>
               </nav>
               {/* Admin User Icon */}
-              <div className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-amber-50 to-yellow-50 border border-amber-300 rounded-xl shadow-sm hover:shadow-md transition-all duration-300">
+              <div className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-orange-50 to-[#FFE5E2] border border-[#E85D4E] rounded-xl shadow-sm hover:shadow-md transition-all duration-300">
                 <div className="relative">
-                  <UserCircle className="w-8 h-8 text-amber-700" />
-                  <Shield className="w-4 h-4 text-amber-600 absolute -bottom-0.5 -right-0.5 bg-white rounded-full p-0.5" />
+                  <UserCircle className="w-8 h-8 text-[#E85D4E]" />
+                  <Shield className="w-4 h-4 text-[#D14839] absolute -bottom-0.5 -right-0.5 bg-white rounded-full p-0.5" />
                 </div>
                 <div className="flex flex-col">
-                  <span className="text-xs font-semibold text-amber-900">Admin</span>
-                  <span className="text-xs text-amber-700">Juan Pérez</span>
+                  <span className="text-xs font-semibold text-[#D14839]">Admin</span>
+                  <span className="text-xs text-[#E85D4E]">Juan Pérez</span>
                 </div>
               </div>
             </div>
@@ -315,11 +315,11 @@ export default function Home() {
       {/* Modern Footer */}
       <footer className="relative mt-20 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white overflow-hidden">
         <div className="absolute inset-0 bg-grid-pattern opacity-5"></div>
-        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-blue-500/50 to-transparent"></div>
+        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#0F4C81] via-[#E85D4E] to-[#0F4C81]"></div>
         <div className="relative container mx-auto px-6 py-10">
           <div className="flex flex-col md:flex-row items-center justify-between gap-6">
             <div className="flex items-center gap-4">
-              <div className="w-8 h-8 bg-gradient-to-br from-[#0F4C81] to-[#0A3A5F] rounded-lg flex items-center justify-center shadow-lg">
+              <div className="w-8 h-8 bg-gradient-to-br from-[#0F4C81] to-[#0A3A5F] rounded-lg flex items-center justify-center shadow-lg ring-2 ring-[#E85D4E]">
                 <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                 </svg>

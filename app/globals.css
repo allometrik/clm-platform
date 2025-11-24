@@ -8,6 +8,9 @@
     --primary-blue: #0F4C81;
     --primary-blue-dark: #0A3A5F;
     --primary-blue-light: #2E7DAF;
+    --accent-orange: #E85D4E;
+    --accent-orange-light: #FF7A6B;
+    --accent-orange-dark: #D14839;
     --primary-dark: #222222;
     --primary: #0F4C81;
     --primary-light: #2E7DAF;
@@ -65,6 +68,13 @@
   .btn-accent {
     @apply relative overflow-hidden bg-gradient-to-r from-[#0F4C81] to-[#0A3A5F] text-white px-6 py-2.5 rounded-xl 
     font-medium shadow-lg shadow-blue-500/30 hover:shadow-xl hover:shadow-blue-500/40
+    hover:scale-[1.02] active:scale-[0.98] 
+    transition-all duration-300 ease-out;
+  }
+  
+  .btn-orange {
+    @apply relative overflow-hidden bg-gradient-to-r from-[#E85D4E] to-[#D14839] text-white px-6 py-2.5 rounded-xl 
+    font-medium shadow-lg shadow-orange-500/30 hover:shadow-xl hover:shadow-orange-500/40
     hover:scale-[1.02] active:scale-[0.98] 
     transition-all duration-300 ease-out;
   }

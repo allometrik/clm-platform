@@ -11,7 +11,7 @@ export default function RiskAssessment({ riskAssessment }: RiskAssessmentProps) 
   const riskConfig = {
     bajo: { label: 'Bajo', icon: CheckCircle, color: 'bg-green-500', textColor: 'text-green-700', bgColor: 'bg-green-50' },
     medio: { label: 'Medio', icon: AlertCircle, color: 'bg-yellow-500', textColor: 'text-yellow-700', bgColor: 'bg-yellow-50' },
-    alto: { label: 'Alto', icon: AlertTriangle, color: 'bg-orange-500', textColor: 'text-orange-700', bgColor: 'bg-orange-50' },
+    alto: { label: 'Alto', icon: AlertTriangle, color: 'bg-[#E85D4E]', textColor: 'text-[#E85D4E]', bgColor: 'bg-[#FFE5E2]' },
     critico: { label: 'Crítico', icon: XCircle, color: 'bg-red-500', textColor: 'text-red-700', bgColor: 'bg-red-50' },
   };
 
@@ -23,7 +23,7 @@ export default function RiskAssessment({ riskAssessment }: RiskAssessmentProps) 
   const factorRiskConfig = {
     bajo: { color: 'bg-green-100 text-green-800' },
     medio: { color: 'bg-yellow-100 text-yellow-800' },
-    alto: { color: 'bg-orange-100 text-orange-800' },
+    alto: { color: 'bg-[#FFE5E2] text-[#E85D4E]' },
     critico: { color: 'bg-red-100 text-red-800' },
   };
 

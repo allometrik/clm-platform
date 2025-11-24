@@ -34,8 +34,8 @@ const statusConfig: Record<RequestStatus, { label: string; color: string; icon: 
 const priorityConfig = {
   baja: { label: 'Baja', color: 'text-gray-600', icon: ArrowDown },
   media: { label: 'Media', color: 'text-blue-600', icon: ArrowRight },
-  alta: { label: 'Alta', color: 'text-orange-600', icon: ArrowUp },
-  urgente: { label: 'Urgente', color: 'text-red-600', icon: AlertCircle },
+  alta: { label: 'Alta', color: 'text-[#E85D4E]', icon: ArrowUp },
+  urgente: { label: 'Urgente', color: 'text-[#E85D4E]', icon: AlertCircle },
 };
 
 export default function RequestDashboard({ requests }: RequestDashboardProps) {
@@ -101,7 +101,7 @@ export default function RequestDashboard({ requests }: RequestDashboardProps) {
         </div>
 
         {/* En Proceso */}
-        <div className="group relative bg-gradient-to-br from-orange-500 to-orange-600 rounded-2xl p-6 text-white shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300 overflow-hidden">
+        <div className="group relative bg-gradient-to-br from-[#E85D4E] to-[#D14839] rounded-2xl p-6 text-white shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300 overflow-hidden ring-2 ring-[#E85D4E] ring-offset-2">
           <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -mr-16 -mt-16"></div>
           <div className="relative">
             <div className="flex items-center justify-between mb-3">

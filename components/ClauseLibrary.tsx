@@ -429,7 +429,7 @@ export default function ClauseLibrary({ initialClauseId, onClauseSelected }: Cla
           {/* Botón de crear cláusula */}
           <button
             onClick={() => setShowCreateClauseModal(true)}
-            className="btn-primary flex items-center gap-2"
+            className="btn-primary flex items-center gap-2 ring-2 ring-[#E85D4E] ring-offset-2 hover:ring-[#FF7A6B]"
           >
             <Plus className="w-4 h-4" />
             Crear Cláusula
