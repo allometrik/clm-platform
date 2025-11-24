@@ -126,12 +126,12 @@ export default function LegalPlaybookView() {
                 {/* Riesgos */}
                 <div className="mb-6">
                   <h4 className="font-semibold text-primary-dark mb-3 flex items-center gap-2">
-                    <AlertTriangle className="w-5 h-5 text-red-500" />
+                    <AlertTriangle className="w-5 h-5 text-orange-500" />
                     Riesgos a Considerar
                   </h4>
                   <div className="space-y-2">
                     {playbook.risks.map((risk, index) => (
-                      <div key={index} className="bg-red-50 border-l-4 border-red-500 p-3 rounded">
+                      <div key={index} className="bg-orange-50 border-l-4 border-orange-500 p-3 rounded">
                         <p className="text-sm text-gray-700">{risk}</p>
                       </div>
                     ))}

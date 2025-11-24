@@ -4,15 +4,15 @@
 
 @layer base {
   :root {
-    /* Primary Color Palette */
-    --primary-green: #10b981;
-    --primary-green-dark: #059669;
-    --primary-green-light: #34d399;
+    /* Pérez-Llorca Color Palette */
+    --primary-blue: #0F4C81;
+    --primary-blue-dark: #0A3A5F;
+    --primary-blue-light: #2E7DAF;
     --primary-dark: #222222;
-    --primary: #10b981;
-    --primary-light: #34d399;
-    --accent: #10b981;
-    --accent-light: #34d399;
+    --primary: #0F4C81;
+    --primary-light: #2E7DAF;
+    --accent: #0F4C81;
+    --accent-light: #2E7DAF;
     --success: #10b981;
     --warning: #f59e0b;
     --error: #ef4444;
@@ -46,15 +46,15 @@
 @layer components {
   /* Primary Buttons */
   .btn-primary {
-    @apply relative overflow-hidden bg-gradient-to-r from-[#10b981] to-[#059669] text-white px-6 py-2.5 rounded-xl 
-    font-medium shadow-lg shadow-green-500/30 hover:shadow-xl hover:shadow-green-500/40
+    @apply relative overflow-hidden bg-gradient-to-r from-[#0F4C81] to-[#0A3A5F] text-white px-6 py-2.5 rounded-xl 
+    font-medium shadow-lg shadow-blue-500/30 hover:shadow-xl hover:shadow-blue-500/40
     hover:scale-[1.02] active:scale-[0.98] 
     transition-all duration-300 ease-out;
   }
   
   .btn-primary::before {
     content: '';
-    @apply absolute inset-0 bg-gradient-to-r from-green-400 to-green-300 opacity-0 
+    @apply absolute inset-0 bg-gradient-to-r from-blue-400 to-blue-300 opacity-0 
     transition-opacity duration-300;
   }
   
@@ -63,8 +63,8 @@
   }
   
   .btn-accent {
-    @apply relative overflow-hidden bg-gradient-to-r from-[#10b981] to-[#059669] text-white px-6 py-2.5 rounded-xl 
-    font-medium shadow-lg shadow-green-500/30 hover:shadow-xl hover:shadow-green-500/40
+    @apply relative overflow-hidden bg-gradient-to-r from-[#0F4C81] to-[#0A3A5F] text-white px-6 py-2.5 rounded-xl 
+    font-medium shadow-lg shadow-blue-500/30 hover:shadow-xl hover:shadow-blue-500/40
     hover:scale-[1.02] active:scale-[0.98] 
     transition-all duration-300 ease-out;
   }
@@ -95,7 +95,7 @@
   /* Modern Input Fields */
   .input-field {
     @apply w-full px-4 py-3 border border-gray-200 rounded-xl
-    focus:outline-none focus:ring-2 focus:ring-[#10b981]/20 focus:border-[#10b981]
+    focus:outline-none focus:ring-2 focus:ring-[#0F4C81]/20 focus:border-[#0F4C81]
     transition-all duration-300 bg-white/80 backdrop-blur-sm
     placeholder:text-gray-400;
   }
@@ -112,7 +112,7 @@
   
   /* Gradient Text */
   .gradient-text {
-    @apply bg-gradient-to-r from-[#10b981] to-[#059669] bg-clip-text text-transparent;
+    @apply bg-gradient-to-r from-[#0F4C81] to-[#0A3A5F] bg-clip-text text-transparent;
   }
   
   /* Stat Cards */
@@ -127,7 +127,7 @@
   }
   
   .shadow-glow {
-    box-shadow: 0 0 30px -5px rgba(16, 185, 129, 0.3);
+    box-shadow: 0 0 30px -5px rgba(15, 76, 129, 0.3);
   }
   
   /* Animated Gradient Background */

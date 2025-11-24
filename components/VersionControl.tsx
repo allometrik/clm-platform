@@ -122,8 +122,8 @@ export default function VersionControl({ contractId }: { contractId: string }) {
                   </div>
 
                   <div className="space-y-3">
-                    <div className="bg-amber-50 border-l-4 border-amber-500 p-3 rounded">
-                      <p className="text-xs font-medium text-amber-800 mb-1">Texto Original</p>
+                    <div className="bg-orange-50 border-l-4 border-orange-500 p-3 rounded">
+                      <p className="text-xs font-medium text-orange-800 mb-1">Texto Original</p>
                       <p className="text-sm text-gray-700 line-through">{redline.originalText}</p>
                     </div>
                     <div className="bg-green-50 border-l-4 border-green-500 p-3 rounded">

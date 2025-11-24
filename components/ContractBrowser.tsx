@@ -902,11 +902,11 @@ export default function ContractBrowser({ contracts, onContractClick, onNavigate
                     alert('Exportando contrato a PDF...');
                     setShowExportModal(false);
                   }}
-                  className="w-full p-4 rounded-xl border-2 border-gray-200 hover:border-green-300 hover:bg-green-50 transition-all text-left group"
+                  className="w-full p-4 rounded-xl border-2 border-gray-200 hover:border-blue-300 hover:bg-blue-50 transition-all text-left group"
                 >
                   <div className="flex items-center gap-3">
-                    <div className="bg-green-100 p-3 rounded-lg group-hover:bg-green-200 transition-colors">
-                      <Download className="w-5 h-5 text-green-600" />
+                    <div className="bg-blue-100 p-3 rounded-lg group-hover:bg-blue-200 transition-colors">
+                      <Download className="w-5 h-5 text-blue-600" />
                     </div>
                     <div className="flex-1">
                       <h4 className="font-semibold text-gray-900">
@@ -1051,7 +1051,7 @@ export default function ContractBrowser({ contracts, onContractClick, onNavigate
                     <Plus className="w-6 h-6" />
                     Crear Nueva Plantilla
                   </h3>
-                  <p className="text-green-100 text-sm">
+                  <p className="text-blue-100 text-sm">
                     Selecciona cláusulas y añade texto personalizado para tu plantilla
                   </p>
                 </div>
@@ -1082,7 +1082,7 @@ export default function ContractBrowser({ contracts, onContractClick, onNavigate
                       type="text"
                       value={templateName}
                       onChange={(e) => setTemplateName(e.target.value)}
-                      className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-green-500/20 focus:border-green-500"
+                      className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500"
                       placeholder="Ej: Plantilla de Servicios Profesionales"
                     />
                   </div>
@@ -1090,7 +1090,7 @@ export default function ContractBrowser({ contracts, onContractClick, onNavigate
                     <label className="block text-sm font-semibold text-gray-700 mb-2">
                       Tipo de Plantilla
                     </label>
-                    <select className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-green-500/20 focus:border-green-500">
+                    <select className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500">
                       <option>Servicios</option>
                       <option>Consultoría</option>
                       <option>Mantenimiento</option>
@@ -1136,10 +1136,10 @@ export default function ContractBrowser({ contracts, onContractClick, onNavigate
                               className="flex-shrink-0"
                             >
                               {clauses.every(c => selectedClauses.has(c.id)) ? (
-                                <CheckSquare className="w-4 h-4 text-green-600" />
+                                <CheckSquare className="w-4 h-4 text-blue-600" />
                               ) : clauses.some(c => selectedClauses.has(c.id)) ? (
-                                <div className="w-4 h-4 border-2 border-green-600 rounded bg-green-100 flex items-center justify-center">
-                                  <div className="w-2 h-2 bg-green-600 rounded-sm"></div>
+                                <div className="w-4 h-4 border-2 border-blue-600 rounded bg-blue-100 flex items-center justify-center">
+                                  <div className="w-2 h-2 bg-blue-600 rounded-sm"></div>
                                 </div>
                               ) : (
                                 <Square className="w-4 h-4 text-gray-400" />
@@ -1161,9 +1161,9 @@ export default function ContractBrowser({ contracts, onContractClick, onNavigate
                                 className="w-full flex items-center gap-2 p-2 rounded-lg hover:bg-white transition-all group text-left"
                               >
                                 {selectedClauses.has(clause.id) ? (
-                                  <CheckSquare className="w-4 h-4 text-green-600 flex-shrink-0" />
+                                  <CheckSquare className="w-4 h-4 text-blue-600 flex-shrink-0" />
                                 ) : (
-                                  <Square className="w-4 h-4 text-gray-400 group-hover:text-green-400 flex-shrink-0" />
+                                  <Square className="w-4 h-4 text-gray-400 group-hover:text-blue-400 flex-shrink-0" />
                                 )}
                                 <div className="flex-1 min-w-0">
                                   <p className="text-sm font-medium text-gray-700 truncate">

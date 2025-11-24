@@ -9,21 +9,21 @@ module.exports = {
     extend: {
       colors: {
         brand: {
-          green: '#10b981',
-          'green-dark': '#059669',
-          'green-light': '#34d399',
+          blue: '#0F4C81',
+          'blue-dark': '#0A3A5F',
+          'blue-light': '#2E7DAF',
           gray: '#222222',
           'gray-medium': '#666666',
         },
         primary: {
           dark: '#222222',
-          DEFAULT: '#10b981',
-          light: '#34d399',
+          DEFAULT: '#0F4C81',
+          light: '#2E7DAF',
         },
         accent: {
-          DEFAULT: '#10b981',
-          light: '#34d399',
-          dark: '#059669',
+          DEFAULT: '#0F4C81',
+          light: '#2E7DAF',
+          dark: '#0A3A5F',
         },
       },
     },
