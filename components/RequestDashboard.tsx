@@ -143,7 +143,7 @@ export default function RequestDashboard({ requests }: RequestDashboardProps) {
               <select
                 value={filterStatus}
                 onChange={(e) => setFilterStatus(e.target.value as RequestStatus | 'all')}
-                className="text-sm border border-gray-300 rounded-md px-3 py-1.5 focus:ring-2 focus:ring-primary focus:border-transparent"
+                className="text-sm border-2 border-gray-300 rounded-md px-3 py-1.5 focus:ring-2 focus:ring-[#E85D4E]/20 focus:border-[#E85D4E] transition-all"
               >
                 <option value="all">Todos</option>
                 {Object.entries(statusConfig).map(([key, config]) => (
@@ -157,7 +157,7 @@ export default function RequestDashboard({ requests }: RequestDashboardProps) {
               <select
                 value={filterPriority}
                 onChange={(e) => setFilterPriority(e.target.value as any)}
-                className="text-sm border border-gray-300 rounded-md px-3 py-1.5 focus:ring-2 focus:ring-primary focus:border-transparent"
+                className="text-sm border-2 border-gray-300 rounded-md px-3 py-1.5 focus:ring-2 focus:ring-[#E85D4E]/20 focus:border-[#E85D4E] transition-all"
               >
                 <option value="all">Todas</option>
                 {Object.entries(priorityConfig).map(([key, config]) => (

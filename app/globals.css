@@ -81,7 +81,7 @@
   
   .btn-secondary {
     @apply bg-white text-gray-700 px-6 py-2.5 rounded-xl border border-gray-200
-    hover:border-gray-300 hover:bg-gray-50 hover:shadow-md
+    hover:border-[#E85D4E] hover:bg-orange-50 hover:shadow-md
     transition-all duration-300 font-medium;
   }
   
@@ -92,7 +92,7 @@
   }
   
   .card-hover {
-    @apply hover:shadow-xl hover:shadow-gray-300/50 hover:border-gray-300/50 
+    @apply hover:shadow-xl hover:shadow-[#E85D4E]/20 hover:border-[#E85D4E]/30 
     hover:-translate-y-1 hover:bg-white/90;
   }
   
@@ -117,7 +117,7 @@
   /* Modern Status Badges */
   .status-badge {
     @apply px-3 py-1.5 rounded-lg text-xs font-semibold
-    shadow-sm transition-all duration-200 hover:shadow-md;
+    shadow-sm transition-all duration-200 hover:shadow-md hover:ring-1 hover:ring-[#E85D4E]/30;
   }
   
   /* Gradient Text */
@@ -183,7 +183,7 @@
   /* Badge Variants */
   .badge-modern {
     @apply inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold
-    shadow-sm hover:shadow-md transition-all duration-200;
+    shadow-sm hover:shadow-md transition-all duration-200 hover:ring-1 hover:ring-[#E85D4E]/40;
   }
   
   /* Modern Divider */

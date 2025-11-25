@@ -440,9 +440,9 @@ export default function ClauseLibrary({ initialClauseId, onClauseSelected }: Cla
       <div className="grid grid-cols-12 gap-6">
         {/* Panel Izquierdo - Árbol de Cláusulas */}
         <div className="col-span-12 lg:col-span-4">
-          <div className="bg-gradient-to-br from-gray-100 to-gray-200 rounded-2xl shadow-lg border border-gray-300/50 p-6 sticky top-24 max-h-[calc(100vh-8rem)] overflow-y-auto">
+          <div className="bg-gradient-to-br from-gray-100 to-gray-200 rounded-2xl shadow-lg border-2 border-[#E85D4E]/30 p-6 sticky top-24 max-h-[calc(100vh-8rem)] overflow-y-auto">
             <div className="flex items-center gap-2 mb-6">
-              <div className="bg-gradient-to-br from-gray-600 to-gray-700 p-2 rounded-xl">
+              <div className="bg-gradient-to-br from-[#E85D4E] to-[#D14839] p-2 rounded-xl shadow-md">
                 <BookOpen className="w-5 h-5 text-white" />
               </div>
               <h3 className="text-lg font-bold text-gray-900">Buscador de Cláusulas</h3>
@@ -451,7 +451,7 @@ export default function ClauseLibrary({ initialClauseId, onClauseSelected }: Cla
             {/* Elegant Search Input */}
             <div className="relative mb-6 group">
               <div className="absolute left-3 top-1/2 transform -translate-y-1/2 transition-all duration-300">
-                <div className="bg-gradient-to-br from-gray-600 to-gray-700 p-2 rounded-lg group-focus-within:scale-110 transition-transform duration-300">
+                <div className="bg-gradient-to-br from-[#E85D4E] to-[#D14839] p-2 rounded-lg group-focus-within:scale-110 transition-transform duration-300 shadow-md">
                   <Search className="text-white w-3.5 h-3.5" />
                 </div>
               </div>
@@ -461,10 +461,10 @@ export default function ClauseLibrary({ initialClauseId, onClauseSelected }: Cla
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Buscar cláusulas..."
                 className="w-full pl-12 pr-10 py-3 border-2 border-gray-300 rounded-xl
-                focus:outline-none focus:ring-4 focus:ring-gray-500/20 focus:border-gray-500
+                focus:outline-none focus:ring-4 focus:ring-[#E85D4E]/20 focus:border-[#E85D4E]
                 transition-all duration-300 bg-white/90 backdrop-blur-sm
                 placeholder:text-gray-400 text-gray-900 font-medium text-sm
-                hover:border-gray-400 hover:bg-white shadow-sm hover:shadow-md"
+                hover:border-[#E85D4E]/50 hover:bg-white shadow-sm hover:shadow-md"
               />
               {searchQuery && (
                 <button
@@ -513,7 +513,7 @@ export default function ClauseLibrary({ initialClauseId, onClauseSelected }: Cla
                     <span className="font-semibold text-gray-900 flex-1 text-left">
                       {category}
                     </span>
-                    <span className="text-xs bg-white px-2 py-0.5 rounded-full text-gray-600">
+                    <span className="text-xs bg-gradient-to-r from-[#E85D4E] to-[#D14839] text-white px-2 py-0.5 rounded-full font-semibold shadow-sm">
                       {clauses.length}
                     </span>
                   </button>
@@ -527,8 +527,8 @@ export default function ClauseLibrary({ initialClauseId, onClauseSelected }: Cla
                           onClick={() => selectClause(clause)}
                           className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-all duration-200 text-left ${
                             selectedClause?.id === clause.id
-                              ? 'bg-gray-600 text-white shadow-md'
-                              : 'hover:bg-white/60 text-gray-700'
+                              ? 'bg-gradient-to-r from-[#E85D4E] to-[#D14839] text-white shadow-md ring-2 ring-[#E85D4E] ring-offset-1'
+                              : 'hover:bg-white/60 text-gray-700 hover:border-[#E85D4E]/30'
                           }`}
                         >
                           <FileText className="w-3.5 h-3.5 flex-shrink-0" />

@@ -46,8 +46,8 @@ export default function TemplateSupermarket() {
             onClick={() => setSelectedCategory(category)}
             className={`px-4 py-2 rounded-lg transition-colors ${
               selectedCategory === category
-                ? 'bg-primary-dark text-white'
-                : 'bg-white text-gray-700 hover:bg-gray-100'
+                ? 'bg-gradient-to-r from-[#E85D4E] to-[#D14839] text-white ring-2 ring-[#E85D4E] ring-offset-1 shadow-md'
+                : 'bg-white text-gray-700 hover:bg-gray-100 hover:border-[#E85D4E]/30'
             }`}
           >
             {category === 'all' ? 'Todas' : category}

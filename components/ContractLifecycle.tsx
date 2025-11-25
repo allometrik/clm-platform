@@ -193,7 +193,7 @@ export default function ContractLifecycle({ contracts, onContractClick }: Contra
                 onClick={() => setFilterStatus('all')}
                 className={`px-3 py-1.5 rounded-md text-xs font-medium transition-all ${
                   filterStatus === 'all'
-                    ? 'bg-primary text-white'
+                    ? 'bg-gradient-to-r from-[#E85D4E] to-[#D14839] text-white ring-2 ring-[#E85D4E] ring-offset-1 shadow-md'
                     : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                 }`}
               >
@@ -208,7 +208,7 @@ export default function ContractLifecycle({ contracts, onContractClick }: Contra
                     onClick={() => setFilterStatus(phase.key as ContractStatus)}
                     className={`px-3 py-1.5 rounded-md text-xs font-medium transition-all flex items-center gap-1 ${
                       filterStatus === phase.key
-                        ? 'bg-primary text-white'
+                        ? 'bg-gradient-to-r from-[#E85D4E] to-[#D14839] text-white ring-2 ring-[#E85D4E] ring-offset-1 shadow-md'
                         : phase.color + ' hover:opacity-80'
                     }`}
                   >

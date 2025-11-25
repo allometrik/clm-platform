@@ -48,7 +48,7 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-gray-50/50">
       {/* Main Header */}
-      <header className="sticky top-0 z-40 bg-gradient-to-r from-gray-200 via-gray-100 to-gray-200 border-b border-gray-300 shadow-lg">
+      <header className="sticky top-0 z-40 bg-gradient-to-r from-gray-200 via-gray-100 to-gray-200 border-b-2 border-[#E85D4E] shadow-lg">
         <div className="container mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4 group">
@@ -84,7 +84,7 @@ export default function Home() {
                     <span>Gestor de Contratos</span>
                   </div>
                   {activeScreen === 'screen1' && (
-                    <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-[#0F4C81] to-transparent"></div>
+                    <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-[#E85D4E] to-transparent"></div>
                   )}
                 </button>
                 {/* Screen 2: Solicitudes */}
@@ -104,7 +104,7 @@ export default function Home() {
                     <span>Solicitudes</span>
                   </div>
                   {activeScreen === 'screen2' && (
-                    <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-[#0F4C81] to-transparent"></div>
+                    <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-[#E85D4E] to-transparent"></div>
                   )}
                 </button>
                 {/* Screen 3: Gestor CLM */}
@@ -124,7 +124,7 @@ export default function Home() {
                     <span>Gestor CLM</span>
                   </div>
                   {activeScreen === 'screen3' && (
-                    <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-[#0F4C81] to-transparent"></div>
+                    <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-[#E85D4E] to-transparent"></div>
                   )}
                 </button>
               </nav>
@@ -150,7 +150,7 @@ export default function Home() {
         {activeScreen === 'screen1' && (
           <>
             {/* Submenu for Screen 1 */}
-            <div className="mb-8 backdrop-blur-sm bg-white/70 rounded-2xl shadow-lg border border-gray-200/50 p-4">
+            <div className="mb-8 backdrop-blur-sm bg-white/70 rounded-2xl shadow-lg border-l-4 border-l-[#E85D4E] border-t border-r border-b border-gray-200/50 p-4">
               <div className="flex flex-wrap gap-3">
                 <button
                   onClick={() => setScreen1View('clauses')}
