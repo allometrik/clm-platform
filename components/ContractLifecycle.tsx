@@ -154,6 +154,21 @@ export default function ContractLifecycle({ contracts, onContractClick, onAddCon
 
   return (
     <div className="space-y-6">
+      {/* Modern Submenu - Consistent with other pages */}
+      <div className="mb-2 backdrop-blur-sm bg-white/70 rounded-2xl shadow-lg border border-gray-200/50 p-4">
+        <div className="flex flex-wrap gap-3">
+          <button
+            onClick={() => setShowAnalysis(true)}
+            className="group relative px-5 py-3 rounded-xl text-sm font-semibold transition-all duration-300 bg-gradient-to-r from-violet-600 to-violet-500 text-white shadow-lg shadow-violet-500/30 hover:shadow-violet-500/40"
+          >
+            <div className="flex items-center gap-2">
+              <Brain className="w-4 h-4" />
+              <span>Analizar Documento</span>
+            </div>
+          </button>
+        </div>
+      </div>
+
       {/* Header */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
@@ -164,13 +179,6 @@ export default function ContractLifecycle({ contracts, onContractClick, onAddCon
             Vista global del estado de todos los contratos
           </p>
         </div>
-        <button
-          onClick={() => setShowAnalysis(true)}
-          className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-violet-600 to-violet-500 text-white rounded-xl shadow-lg shadow-violet-500/30 hover:shadow-violet-500/40 transition-all hover:-translate-y-0.5"
-        >
-          <Brain className="w-4 h-4" />
-          <span>Analizar Documento</span>
-        </button>
       </div>
 
       {/* Analysis Modal/Overlay */}
