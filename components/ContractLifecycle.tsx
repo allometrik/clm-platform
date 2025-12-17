@@ -15,13 +15,21 @@ import {
   AlertCircle,
   TrendingUp,
   Clock,
-  Eye
+  Eye,
+  Upload,
+  Brain,
+  Table as TableIcon,
+  X,
+  FileJson,
+  Loader2,
+  Check
 } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 
 interface ContractLifecycleProps {
   contracts: Contract[];
   onContractClick?: (contract: Contract) => void;
+  onAddContract?: (contract: any) => void;
 }
 
 const lifecyclePhases = [
@@ -49,9 +57,66 @@ const getStatusIcon = (status: ContractStatus) => {
   return phase?.icon || FileText;
 };
 
-export default function ContractLifecycle({ contracts, onContractClick }: ContractLifecycleProps) {
+export default function ContractLifecycle({ contracts, onContractClick, onAddContract }: ContractLifecycleProps) {
   const [filterStatus, setFilterStatus] = useState<ContractStatus | 'all'>('all');
   const [selectedView, setSelectedView] = useState<'timeline' | 'table'>('timeline');
+  
+  // Analysis State
+  const [showAnalysis, setShowAnalysis] = useState(false);
+  const [analysisStep, setAnalysisStep] = useState<'idle' | 'uploading' | 'processing' | 'complete'>('idle');
+  const [analyzedFile, setAnalyzedFile] = useState<File | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const mockExtractionData = {
+    summary: "Contrato de prestación de servicios de desarrollo de software y mantenimiento evolutivo.",
+    entities: [
+      { label: "Cliente", value: "TechCorp Industries S.A." },
+      { label: "Proveedor", value: "DevSolutions Global Ltd." },
+      { label: "Fecha Inicio", value: "01/01/2024" },
+      { label: "Duración", value: "24 meses" },
+      { label: "Valor Total", value: "120.000,00 €" },
+      { label: "Jurisdicción", value: "Madrid, España" }
+    ],
+    obligations: [
+      "Entregar código fuente documentado mensualmente",
+      "Realizar reuniones de seguimiento quincenales",
+      "Garantizar disponibilidad del servicio 99.9%"
+    ],
+    tables: [
+      {
+        title: "Cronograma de Pagos",
+        headers: ["Hito", "Fecha Estimada", "Porcentaje", "Importe"],
+        rows: [
+          ["Firma del contrato", "01/01/2024", "20%", "24.000 €"],
+          ["Entrega Fase 1", "01/06/2024", "30%", "36.000 €"],
+          ["Entrega Fase 2", "01/12/2024", "30%", "36.000 €"],
+          ["Finalización y Cierre", "31/12/2025", "20%", "24.000 €"]
+        ]
+      }
+    ]
+  };
+
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setAnalyzedFile(file);
+      setAnalysisStep('uploading');
+      // Mock upload process
+      setTimeout(() => {
+        setAnalysisStep('processing');
+        // Mock processing
+        setTimeout(() => {
+          setAnalysisStep('complete');
+        }, 2000);
+      }, 1500);
+    }
+  };
+
+  const resetAnalysis = () => {
+    setAnalyzedFile(null);
+    setAnalysisStep('idle');
+    setShowAnalysis(false);
+  };
 
   // Calculate statistics
   const totalContracts = contracts.length;
@@ -99,7 +164,218 @@ export default function ContractLifecycle({ contracts, onContractClick }: Contra
             Vista global del estado de todos los contratos
           </p>
         </div>
+        <button
+          onClick={() => setShowAnalysis(true)}
+          className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-violet-600 to-violet-500 text-white rounded-xl shadow-lg shadow-violet-500/30 hover:shadow-violet-500/40 transition-all hover:-translate-y-0.5"
+        >
+          <Brain className="w-4 h-4" />
+          <span>Analizar Documento</span>
+        </button>
       </div>
+
+      {/* Analysis Modal/Overlay */}
+      {showAnalysis && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
+          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-y-auto flex flex-col">
+            <div className="p-6 border-b border-gray-100 flex items-center justify-between sticky top-0 bg-white z-10">
+              <div className="flex items-center gap-3">
+                <div className="bg-violet-100 p-2 rounded-lg">
+                  <Brain className="w-6 h-6 text-violet-600" />
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold text-gray-800">Análisis de Documento</h3>
+                  <p className="text-sm text-gray-500">Extracción automática de datos y tablas</p>
+                </div>
+              </div>
+              <button 
+                onClick={resetAnalysis}
+                className="text-gray-400 hover:text-gray-600 p-2 hover:bg-gray-100 rounded-full transition-colors"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="p-6 flex-1">
+              {analysisStep === 'idle' && (
+                <div 
+                  className="border-2 border-dashed border-gray-300 rounded-xl p-12 flex flex-col items-center justify-center text-center hover:border-violet-500 hover:bg-violet-50 transition-all cursor-pointer group"
+                  onClick={() => fileInputRef.current?.click()}
+                >
+                  <input 
+                    type="file" 
+                    ref={fileInputRef} 
+                    className="hidden" 
+                    accept=".pdf" 
+                    onChange={handleFileUpload}
+                  />
+                  <div className="bg-violet-100 p-4 rounded-full mb-4 group-hover:scale-110 transition-transform">
+                    <Upload className="w-8 h-8 text-violet-600" />
+                  </div>
+                  <h4 className="text-lg font-semibold text-gray-700 mb-2">Sube tu documento PDF</h4>
+                  <p className="text-gray-500 max-w-sm mb-4">
+                    Arrastra y suelta tu archivo aquí o haz clic para explorar. 
+                    El sistema procesará automáticamente el contenido.
+                  </p>
+                  <span className="text-xs text-gray-400">Soporta PDF hasta 10MB</span>
+                </div>
+              )}
+
+              {(analysisStep === 'uploading' || analysisStep === 'processing') && (
+                <div className="py-20 flex flex-col items-center justify-center text-center">
+                  <div className="relative mb-6">
+                    <div className="w-20 h-20 border-4 border-violet-100 border-t-violet-600 rounded-full animate-spin"></div>
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <Brain className="w-8 h-8 text-violet-600 animate-pulse" />
+                    </div>
+                  </div>
+                  <h4 className="text-xl font-semibold text-gray-800 mb-2">
+                    {analysisStep === 'uploading' ? 'Subiendo documento...' : 'Analizando contenido...'}
+                  </h4>
+                  <p className="text-gray-500 animate-pulse">
+                    {analysisStep === 'uploading' 
+                      ? 'Por favor espere mientras se carga el archivo.'
+                      : 'Nuestra IA está extrayendo entidades, cláusulas y tablas.'}
+                  </p>
+                </div>
+              )}
+
+              {analysisStep === 'complete' && analyzedFile && (
+                <div className="space-y-8">
+                  <div className="flex items-center gap-4 bg-green-50 p-4 rounded-xl border border-green-100">
+                    <div className="bg-green-100 p-2 rounded-full">
+                      <Check className="w-5 h-5 text-green-600" />
+                    </div>
+                    <div>
+                      <p className="font-medium text-green-800">Análisis completado con éxito</p>
+                      <p className="text-sm text-green-600">{analyzedFile.name}</p>
+                    </div>
+                  </div>
+
+                  {/* Extracted Data Grid */}
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    {/* General Info */}
+                    <div className="bg-gray-50 rounded-xl p-6 border border-gray-200">
+                      <div className="flex items-center gap-2 mb-4">
+                        <FileJson className="w-5 h-5 text-violet-600" />
+                        <h4 className="font-semibold text-gray-800">Información General</h4>
+                      </div>
+                      <div className="space-y-4">
+                        <div className="bg-white p-3 rounded-lg border border-gray-200 shadow-sm">
+                          <p className="text-xs text-gray-500 mb-1">Resumen del Documento</p>
+                          <p className="text-sm text-gray-700 leading-relaxed">{mockExtractionData.summary}</p>
+                        </div>
+                        <div className="grid grid-cols-2 gap-4">
+                          {mockExtractionData.entities.map((entity, idx) => (
+                            <div key={idx} className="bg-white p-3 rounded-lg border border-gray-200 shadow-sm">
+                              <p className="text-xs text-gray-500 mb-1">{entity.label}</p>
+                              <p className="text-sm font-medium text-gray-800">{entity.value}</p>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Tables */}
+                    <div className="bg-gray-50 rounded-xl p-6 border border-gray-200">
+                      <div className="flex items-center gap-2 mb-4">
+                        <TableIcon className="w-5 h-5 text-violet-600" />
+                        <h4 className="font-semibold text-gray-800">Tablas Extraídas</h4>
+                      </div>
+                      <div className="space-y-6">
+                        {mockExtractionData.tables.map((table, idx) => (
+                          <div key={idx} className="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
+                            <div className="px-4 py-2 bg-gray-50 border-b border-gray-200 font-medium text-sm text-gray-700">
+                              {table.title}
+                            </div>
+                            <div className="overflow-x-auto">
+                              <table className="min-w-full divide-y divide-gray-200">
+                                <thead className="bg-gray-50">
+                                  <tr>
+                                    {table.headers.map((header, hIdx) => (
+                                      <th key={hIdx} className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        {header}
+                                      </th>
+                                    ))}
+                                  </tr>
+                                </thead>
+                                <tbody className="bg-white divide-y divide-gray-200">
+                                  {table.rows.map((row, rIdx) => (
+                                    <tr key={rIdx}>
+                                      {row.map((cell, cIdx) => (
+                                        <td key={cIdx} className="px-3 py-2 text-xs text-gray-700 whitespace-nowrap">
+                                          {cell}
+                                        </td>
+                                      ))}
+                                    </tr>
+                                  ))}
+                                </tbody>
+                              </table>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                      
+                      <div className="mt-6">
+                        <div className="flex items-center gap-2 mb-3">
+                          <CheckCircle className="w-5 h-5 text-violet-600" />
+                          <h4 className="font-semibold text-gray-800">Obligaciones Clave</h4>
+                        </div>
+                        <ul className="space-y-2">
+                          {mockExtractionData.obligations.map((obs, idx) => (
+                            <li key={idx} className="flex items-start gap-2 text-sm text-gray-700 bg-white p-2 rounded border border-gray-200">
+                              <div className="min-w-[6px] h-[6px] rounded-full bg-violet-500 mt-1.5"></div>
+                              {obs}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+            
+            {analysisStep === 'complete' && (
+              <div className="p-6 border-t border-gray-100 bg-gray-50 rounded-b-2xl flex justify-end gap-3">
+                <button 
+                  onClick={resetAnalysis}
+                  className="px-4 py-2 text-gray-600 font-medium hover:bg-gray-200 rounded-lg transition-colors"
+                >
+                  Cerrar
+                </button>
+                <button 
+                  onClick={() => {
+                    if (onAddContract) {
+                      const client = mockExtractionData.entities.find(e => e.label === "Cliente")?.value || "Cliente Desconocido";
+                      const valueStr = mockExtractionData.entities.find(e => e.label === "Valor Total")?.value || "0";
+                      const value = parseFloat(valueStr.replace(/\./g, '').replace(/,/g, '.').replace(/[^0-9.]/g, ''));
+                      
+                      const newContractData = {
+                        title: analyzedFile?.name.replace('.pdf', '') || "Nuevo Contrato",
+                        client: client,
+                        description: mockExtractionData.summary,
+                        value: value,
+                        currency: 'EUR',
+                        contractType: 'Servicios',
+                        responsibleArea: 'Legal',
+                        signingParties: [client, 'Nuestra Empresa'],
+                        currentVersion: 1,
+                        riskLevel: 'medio',
+                        expirationDate: new Date(new Date().setFullYear(new Date().getFullYear() + 2)).toISOString().split('T')[0] // 2 years from now
+                      };
+                      onAddContract(newContractData);
+                    }
+                    resetAnalysis();
+                  }}
+                  className="px-6 py-2 bg-violet-600 text-white font-medium rounded-lg hover:bg-violet-700 shadow-lg shadow-violet-500/20 transition-all"
+                >
+                  Guardar como Borrador
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
 
       {/* Modern Control Panel - Key Indicators */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">

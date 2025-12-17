@@ -10,7 +10,23 @@ import RequestDashboard from '@/components/RequestDashboard';
 import TemplateSupermarket from '@/components/TemplateSupermarket';
 import LegalPlaybookView from '@/components/LegalPlaybook';
 import ContractLifecycle from '@/components/ContractLifecycle';
-import { FileText, Plus, BookOpen, Ticket, ShoppingCart, Scale, Search, Activity, ExternalLink, UserCircle, Shield } from 'lucide-react';
+import { 
+  FileText, 
+  Plus, 
+  BookOpen, 
+  Ticket, 
+  ShoppingCart, 
+  Scale, 
+  Search, 
+  Activity, 
+  ExternalLink, 
+  UserCircle, 
+  Shield,
+  MessageSquare,
+  X,
+  Send,
+  Bot
+} from 'lucide-react';
 
 type MainScreen = 'screen1' | 'screen2' | 'screen3';
 type Screen1View = 'clauses' | 'contracts' | 'market';
@@ -26,6 +42,33 @@ export default function Home() {
   const [screen3View, setScreen3View] = useState<Screen3View>('lifecycle');
   const [selectedClauseId, setSelectedClauseId] = useState<string | null>(null);
 
+  // Chat State
+  const [isChatOpen, setIsChatOpen] = useState(false);
+  const [chatMessage, setChatMessage] = useState('');
+  const [messages, setMessages] = useState<{role: 'user' | 'assistant', text: string}[]>([
+    { role: 'assistant', text: 'Hola, soy tu asistente legal IA. ¿En qué puedo ayudarte hoy con tus contratos?' }
+  ]);
+
+  const handleSendMessage = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!chatMessage.trim()) return;
+
+    setMessages(prev => [...prev, { role: 'user', text: chatMessage }]);
+    const userMsg = chatMessage;
+    setChatMessage('');
+
+    // Simulate AI response
+    setTimeout(() => {
+      let response = "Entiendo, puedo ayudarte con eso.";
+      if (userMsg.toLowerCase().includes('contrato')) {
+        response = "Puedo ayudarte a redactar, revisar o analizar contratos. ¿Qué necesitas específicamente?";
+      } else if (userMsg.toLowerCase().includes('cláusula')) {
+        response = "Tengo acceso a la biblioteca de cláusulas aprobadas. ¿Buscas alguna en particular?";
+      }
+      setMessages(prev => [...prev, { role: 'assistant', text: response }]);
+    }, 1000);
+  };
+
   const handleGenerateContract = (contractData: any) => {
     const newContract = {
       id: String(contracts.length + 1),
@@ -37,6 +80,17 @@ export default function Home() {
     setContracts([newContract, ...contracts]);
     setActiveScreen('screen1');
     setScreen1View('contracts');
+  };
+
+  const handleAddContract = (contractData: any) => {
+    const newContract = {
+      id: String(contracts.length + 1),
+      ...contractData,
+      status: 'borrador' as const,
+      createdDate: new Date().toISOString().split('T')[0],
+      lastModified: new Date().toISOString().split('T')[0],
+    };
+    setContracts([newContract, ...contracts]);
   };
 
   const handleNavigateToClause = (clauseId: string) => {
@@ -61,7 +115,7 @@ export default function Home() {
               </div>
               <div>
                 <h1 className="text-2xl font-bold text-gray-800">
-                  Plataforma de Accesibilidad
+                  CLM Platform
                 </h1>
               </div>
             </div>
@@ -307,6 +361,7 @@ export default function Home() {
           <div className="space-y-6">
             <ContractLifecycle 
               contracts={contracts}
+              onAddContract={handleAddContract}
             />
           </div>
         )}
@@ -326,18 +381,102 @@ export default function Home() {
               </div>
               <div>
                 <h3 className="text-lg font-bold text-white">
-                  Plataforma de Accesibilidad
+                CLM Platform
                 </h3>
               </div>
             </div>
             <div className="text-center md:text-right">
               <p className="text-sm text-gray-400">
-                © 2025 Plataforma de Accesibilidad. Gestión contractual profesional.
+                © 2025 CLM Platform. Gestión contractual profesional.
               </p>
             </div>
           </div>
         </div>
       </footer>
+
+      {/* Floating AI Chat Widget */}
+      <div className="fixed bottom-6 left-6 z-50 flex flex-col items-start gap-4">
+        {isChatOpen && (
+          <div className="bg-white rounded-2xl shadow-2xl w-80 md:w-96 border border-gray-200 overflow-hidden flex flex-col mb-4 animate-in slide-in-from-bottom-5 duration-300">
+            {/* Chat Header */}
+            <div className="bg-gradient-to-r from-[#0F4C81] to-[#0A3A5F] p-4 flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="bg-white/20 p-2 rounded-full">
+                  <Bot className="w-5 h-5 text-white" />
+                </div>
+                <div>
+                  <h4 className="font-bold text-white text-sm">Asistente Legal IA</h4>
+                  <div className="flex items-center gap-1.5">
+                    <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
+                    <span className="text-xs text-blue-100">En línea</span>
+                  </div>
+                </div>
+              </div>
+              <button 
+                onClick={() => setIsChatOpen(false)}
+                className="text-white/80 hover:text-white hover:bg-white/10 p-1 rounded-lg transition-colors"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            
+            {/* Chat Messages */}
+            <div className="h-80 overflow-y-auto p-4 space-y-4 bg-gray-50">
+              {messages.map((msg, idx) => (
+                <div key={idx} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+                  <div className={`max-w-[85%] p-3 rounded-2xl text-sm ${
+                    msg.role === 'user' 
+                      ? 'bg-[#0F4C81] text-white rounded-br-none' 
+                      : 'bg-white text-gray-700 shadow-sm border border-gray-100 rounded-bl-none'
+                  }`}>
+                    {msg.text}
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Chat Input */}
+            <form onSubmit={handleSendMessage} className="p-3 bg-white border-t border-gray-100">
+              <div className="relative">
+                <input
+                  type="text"
+                  value={chatMessage}
+                  onChange={(e) => setChatMessage(e.target.value)}
+                  placeholder="Escribe tu consulta legal..."
+                  className="w-full pl-4 pr-10 py-2.5 rounded-xl border border-gray-200 focus:border-[#0F4C81] focus:ring-2 focus:ring-[#0F4C81]/20 outline-none text-sm bg-gray-50 focus:bg-white transition-all"
+                />
+                <button 
+                  type="submit"
+                  disabled={!chatMessage.trim()}
+                  className="absolute right-2 top-1.5 p-1.5 bg-[#0F4C81] text-white rounded-lg hover:bg-[#0A3A5F] disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                >
+                  <Send className="w-4 h-4" />
+                </button>
+              </div>
+            </form>
+          </div>
+        )}
+
+        {/* Floating Button */}
+        <button
+          onClick={() => setIsChatOpen(!isChatOpen)}
+          className={`group flex items-center justify-center w-14 h-14 rounded-full shadow-lg hover:shadow-2xl transition-all duration-300 ${
+            isChatOpen 
+              ? 'bg-gray-800 text-white rotate-90' 
+              : 'bg-gradient-to-r from-[#0F4C81] to-[#0A3A5F] text-white hover:scale-110'
+          }`}
+        >
+          {isChatOpen ? (
+            <X className="w-6 h-6" />
+          ) : (
+            <MessageSquare className="w-6 h-6" />
+          )}
+          
+          {!isChatOpen && (
+            <span className="absolute -top-1 -right-1 w-4 h-4 bg-[#E85D4E] rounded-full border-2 border-white"></span>
+          )}
+        </button>
+      </div>
     </div>
   );
 }
